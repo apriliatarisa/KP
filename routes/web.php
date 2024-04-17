@@ -41,6 +41,10 @@ Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.e
 
 
 Route::get('/surat-masuk', [SuratMasukController::class, 'index'])->name('surat_masuk.index');
+Route::get('/surat-masuk/create', [SuratMasukController::class, 'create'])->name('surat_masuk.create');
+Route::post('/surat-masuk', [SuratMasukController::class, 'store'])->name('surat_masuk.store');
+
+
 
 
 require __DIR__.'/auth.php';

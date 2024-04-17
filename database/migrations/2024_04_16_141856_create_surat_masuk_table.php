@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('no_surat');
             $table->date('tgl_terima');
             $table->text('isi');
-            $table->string('file_path'); 
+            $table->string('file_path')->nullable(); // Menjadikan kolom nullable
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
@@ -32,3 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('surat_masuk');
     }
 };
+
