@@ -43,7 +43,11 @@ Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.e
 Route::get('/surat-masuk', [SuratMasukController::class, 'index'])->name('surat_masuk.index');
 Route::get('/surat-masuk/create', [SuratMasukController::class, 'create'])->name('surat_masuk.create');
 Route::post('/surat-masuk', [SuratMasukController::class, 'store'])->name('surat_masuk.store');
-
+Route::get('/surat-masuk/{id}', [SuratMasukController::class, 'show'])->name('surat_masuk.show');
+Route::get('/surat-masuk/{id}/edit', [SuratMasukController::class, 'edit'])->name('surat_masuk.edit');
+Route::put('/surat-masuk/{id}', [SuratMasukController::class, 'update'])->name('surat_masuk.update');
+Route::delete('/surat-masuk/{id}', [SuratMasukController::class, 'destroy'])->name('surat_masuk.destroy');
+Route::post('/surat-masuk/{id}/disposisi', 'SuratMasukController@disposisi')->name('surat_masuk.disposisi');
 
 
 
