@@ -7,13 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 
-
 class SuratMasukController extends Controller
 {
     // Menampilkan semua data surat masuk
     public function index()
     {
-        $suratMasuk = SuratMasuk::all();
+        $suratMasuk = SuratMasuk::paginate(10);
         return view('surat-masuk.surat_masuk', compact('suratMasuk'));
     }
 
@@ -23,109 +22,99 @@ class SuratMasukController extends Controller
         return view('surat-masuk.surat_masuk_create');
     }
 
-    // Menyimpan data surat masuk yang baru ditambahkan
+    // Metode store
     public function store(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'asal_surat' => 'required|string',
-        'no_surat' => 'required|string',
-        'tgl_terima' => 'required|date',
-        'isi' => 'required|string',
-        'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
-    ]);
-
-    // Simpan data surat masuk
-    $data = [
-        'asal_surat' => $request->asal_surat,
-        'no_surat' => $request->no_surat,
-        'tgl_terima' => $request->tgl_terima,
-        'isi' => $request->isi,
-        'id_user' => auth()->id(), // Menggunakan ID pengguna yang sedang login
-    ];
-
-    // Jika ada file yang diunggah
-    if ($request->hasFile('file')) {
-        $file = $request->file('file');
-        $file->storeAs('public/surat_masuk', $file->hashName());
-        $data['file_path'] = $file->hashName();
-    }
-
-    SuratMasuk::create($data);
-
-    return redirect()->route('surat_masuk.index')
-        ->with('success', 'Surat masuk berhasil ditambahkan.');
-    }
-
-    public function show(SuratMasuk $suratMasuk)
     {
-    $filePath = $suratMasuk->file_path;
-    return view('surat-masuk.surat_masuk_show', compact('suratMasuk', 'filePath'));
+        // Validasi input
+        $request->validate([
+            'asal_surat' => 'required|string',
+            'no_surat' => 'required|string',
+            'tgl_terima' => 'required|date',
+            'isi' => 'required|string',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
+        ]);
+
+        // Simpan data surat masuk
+        $data = [
+            'asal_surat' => $request->asal_surat,
+            'no_surat' => $request->no_surat,
+            'tgl_terima' => $request->tgl_terima,
+            'isi' => $request->isi,
+            'id_user' => auth()->id(), // Menggunakan ID pengguna yang sedang login
+        ];
+
+        // Jika ada file yang diunggah
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $file->storeAs('public/surat_masuk', $file->hashName());
+            $data['file_path'] = $file->hashName();
+        } else {
+            // Tidak ada file yang diunggah, atur nilai default atau null untuk file_path
+            $data['file_path'] = null; // atau nilai default lainnya
+        }
+
+        SuratMasuk::create($data);
+
+        return redirect()->route('surat_masuk.index')
+            ->with('success', 'Surat masuk berhasil ditambahkan.');
     }
 
-
-
-    // Menampilkan form untuk mengedit data surat masuk
+    // Menampilkan formulir untuk mengedit data surat masuk
     public function edit($id)
     {
-        $surat_masuk = SuratMasuk::findOrFail($id);
-        return view('surat-masuk.surat_masuk_edit', compact('surat_masuk'));
+    $suratMasuk = SuratMasuk::findOrFail($id); // Variabel sudah diperbaiki
+    return view('surat-masuk.surat_masuk_edit', compact('suratMasuk'));
     }
-    
 
-    // Menyimpan perubahan pada data surat masuk yang diedit
+
+    // Metode update
     public function update(Request $request, $id)
     {
-    // Validasi input
-    $request->validate([
-        'asal_surat' => 'required|string',
-        'no_surat' => 'required|string',
-        'tgl_terima' => 'required|date',
-        'isi' => 'required|string',
-        'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
-    ]);
+        // Validasi input
+        $request->validate([
+            'asal_surat' => 'required|string',
+            'no_surat' => 'required|string',
+            'tgl_terima' => 'required|date',
+            'isi' => 'required|string',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
+        ]);
 
-    // Menemukan instance SuratMasuk yang akan diperbarui berdasarkan ID
-    $surat_masuk = SuratMasuk::findOrFail($id);
+        // Menemukan instance SuratMasuk yang akan diperbarui berdasarkan ID
+        $surat_masuk = SuratMasuk::findOrFail($id);
 
-    // Update data surat masuk
-    $data = [
-        'asal_surat' => $request->asal_surat,
-        'no_surat' => $request->no_surat,
-        'tgl_terima' => $request->tgl_terima,
-        'isi' => $request->isi,
-    ];
+        // Update data surat masuk
+        $data = [
+            'asal_surat' => $request->asal_surat,
+            'no_surat' => $request->no_surat,
+            'tgl_terima' => $request->tgl_terima,
+            'isi' => $request->isi,
+        ];
 
-    // Jika ada file yang diunggah
-    if ($request->hasFile('file')) {
-        $file = $request->file('file');
-        $filePath = $file->store('surat_masuk');
-        $data['file_path'] = $filePath;
-    }
+        // Jika ada file yang diunggah
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filePath = $file->store('public/surat_masuk');
+            $data['file_path'] = $filePath;
+        } else {
+            // Tidak ada file yang diunggah, atur nilai default atau null untuk file_path
+            $data['file_path'] = null; // atau nilai default lainnya
+        }
 
-    // Memperbarui data surat masuk dengan data yang baru
-    $surat_masuk->update($data);
+        // Memperbarui data surat masuk dengan data yang baru
+        $surat_masuk->update($data);
 
-    // Mengarahkan kembali ke halaman index dengan pesan sukses
-    return redirect()->route('surat_masuk.index')
-        ->with('success', 'Data surat masuk berhasil diperbarui.');
+        // Mengarahkan kembali ke halaman index dengan pesan sukses
+        return redirect()->route('surat_masuk.index')
+            ->with('success', 'Data surat masuk berhasil diperbarui.');
     }
 
     // Menghapus data surat masuk
     public function destroy($id)
-{
-    $suratMasuk = SuratMasuk::findOrFail($id);
-    $suratMasuk->delete();
+    {
+        $suratMasuk = SuratMasuk::findOrFail($id);
+        $suratMasuk->delete();
 
-    return redirect()->route('surat_masuk.index')
-        ->with('success', 'Data surat masuk berhasil dihapus.');
-}
-
-// public function disposisi()
-// {
-//     $users = User::all(); // Mengambil semua data pengguna
-
-//     // Mengembalikan tampilan disposisi dan mengirimkan data pengguna ke tampilan
-//     return view('surat-masuk.disposisi', compact('users'));
-// }
+        return redirect()->route('surat_masuk.index')
+            ->with('success', 'Data surat masuk berhasil dihapus.');
+    }
 }

@@ -25,4 +25,16 @@ class SuratMasuk extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    // Relasi dengan model DisposisiSm
+    public function disposisi()
+    {
+        return $this->hasMany(DisposisiSm::class, 'id_surat_masuk');
+    }
+
+    // // Metode untuk menyimpan disposisi
+    // public function addDisposisi($data)
+    // {
+    //     return $this->disposisi()->create($data);
+    // }
 }

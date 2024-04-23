@@ -15,9 +15,9 @@
 
    <!-- Nav Item - Beranda -->
     <li class="nav-item">
-    <a class="nav-link" href="index.html">
+    {{-- <a class="nav-link" href="index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Beranda</span></a>
+        <span>Beranda</span></a> --}}
     </li>
 
 
@@ -51,6 +51,15 @@
         <span>Surat Masuk</span>
     </a>
     </li>
+
+    <!-- Nav Item - Disposisi Surat Masuk -->
+    <li class="nav-item">
+    <a class="nav-link" href="{{ route('disposisi_sm.index') }}">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span>Disposisi Surat Masuk</span>
+    </a>
+    </li>
+
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
