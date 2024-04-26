@@ -62,6 +62,7 @@ Route::delete('/disposisi/{id}', [DisposisiSmController::class, 'destroy'])->nam
 
 Route::get('/surat_masuk/{suratMasuk}/disposisi/create', [DisposisiSmController::class, 'create'])->name('surat_masuk.disposisi.create');
 Route::post('/surat_masuk/{suratMasuk}/disposisi', [DisposisiSmController::class, 'store'])->name('surat_masuk.disposisi.store');
+Route::post('/disposisi_sm/{id}/mark_as_completed', [DisposisiSmController::class, 'markAsCompleted'])->name('mark_as_completed');
 
 
 require __DIR__.'/auth.php';

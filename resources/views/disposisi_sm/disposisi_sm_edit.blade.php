@@ -1,21 +1,24 @@
 <x-app-layout>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Tambah Disposisi</div>
-
+                    <div class="card-header">Edit Disposisi Surat Masuk</div>
                     <div class="card-body">
-                        <form action="{{ route('disposisi_sm.store') }}" method="POST">
+                        <!-- Form untuk mengedit disposisi surat masuk -->
+                        <form action="{{ route('disposisi_sm.update', $disposisi_sm->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
+                            <!-- Isian untuk surat masuk -->
                             <div class="mb-3">
                                 <label for="surat_masuk" class="form-label">Pilih Surat Masuk</label>
                                 <select class="form-select" id="surat_masuk" name="id_surat_masuk">
-                                    @foreach($suratMasukList as $suratMasuk)
+                                    @foreach($suratMasukList as $suratMasuk) <!-- Perbaikan di sini -->
                                         <option value="{{ $suratMasuk->id }}">{{ $suratMasuk->no_surat }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div>                            
+                            <!-- Isian untuk tujuan -->
                             <div class="mb-3">
                                 <label for="tujuan" class="form-label">Pilih Pengguna Tujuan</label>
                                 <div class="form-check">
@@ -27,12 +30,15 @@
                                     @endforeach
                                 </div>
                             </div>
+                            <!-- Isian untuk catatan -->
                             <div class="mb-3">
                                 <label for="catatan" class="form-label">Catatan</label>
-                                <textarea class="form-control" id="catatan" name="catatan" rows="3"></textarea>
+                                <textarea class="form-control" id="catatan" name="catatan" rows="3">{{ $disposisi_sm->catatan }}</textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Kirim</button>
-                        </form>
+                            <!-- Tombol untuk menyimpan perubahan -->
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </form>                        
+                        <!-- End of Form -->
                     </div>
                 </div>
             </div>

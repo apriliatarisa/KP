@@ -8,9 +8,9 @@
    
     <div class="d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 navbar-search" style="white-space: nowrap;">
         <span class="friendship-text" style="font-weight: bold; font-family: Arial, sans-serif; font-size: 1.2rem; color: #116fd3; text-shadow: 1px 1px 2px rgba(248, 248, 249, 0.5); transition: transform 0.2s;">
-            <i class="fas fa-heart" style="color: rgb(212, 168, 24);"></i> Sahabat Perjuangan Anda Sepanjang Masa
+            Sahabat Perjuangan Anda Sepanjang Masa
         </span>
-    </div>
+    </div>    
     
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">

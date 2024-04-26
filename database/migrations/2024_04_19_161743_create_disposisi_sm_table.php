@@ -16,7 +16,7 @@ class CreateDisposisiSmTable extends Migration
         Schema::create('disposisi_sm', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_user'); // Foreign key ke tabel users (many-to-one)
-            $table->unsignedBigInteger('id_surat_masuk')->unique(); // Foreign key ke tabel surat_masuk (one-to-one)
+            $table->unsignedBigInteger('id_surat_masuk'); // Foreign key ke tabel surat_masuk (one-to-one)
             $table->text('tujuan'); // User yang akan dikirim disposisi
             $table->text('catatan'); // Pesan untuk user yang dituju
             $table->timestamps();
