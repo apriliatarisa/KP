@@ -18,6 +18,7 @@ class DisposisiSm extends Model
         'id_surat_masuk',
         'tujuan',
         'catatan',
+        'status',
     ];
 
     // Definisi hubungan dengan model User

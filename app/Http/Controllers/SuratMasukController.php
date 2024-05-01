@@ -12,7 +12,7 @@ class SuratMasukController extends Controller
     // Menampilkan semua data surat masuk
     public function index()
     {
-        $suratMasuk = SuratMasuk::paginate(10);
+        $suratMasuk = SuratMasuk::orderBy('created_at','desc')->paginate(10);
         return view('surat-masuk.surat_masuk', compact('suratMasuk'));
     }
 
@@ -29,7 +29,7 @@ class SuratMasukController extends Controller
         $request->validate([
             'asal_surat' => 'required|string',
             'no_surat' => 'required|string',
-            'tgl_terima' => 'required|date',
+            'tgl_terima' => 'nullable|date',
             'isi' => 'required|string',
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
         ]);
@@ -62,8 +62,8 @@ class SuratMasukController extends Controller
     // Menampilkan formulir untuk mengedit data surat masuk
     public function edit($id)
     {
-    $suratMasuk = SuratMasuk::findOrFail($id); // Variabel sudah diperbaiki
-    return view('surat-masuk.surat_masuk_edit', compact('suratMasuk'));
+        $suratMasuk = SuratMasuk::findOrFail($id); // Variabel sudah diperbaiki
+        return view('surat-masuk.surat_masuk_edit', compact('suratMasuk'));
     }
 
 
@@ -74,13 +74,13 @@ class SuratMasukController extends Controller
         $request->validate([
             'asal_surat' => 'required|string',
             'no_surat' => 'required|string',
-            'tgl_terima' => 'required|date',
+            'tgl_terima' => 'nullable|date',
             'isi' => 'required|string',
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
         ]);
 
         // Menemukan instance SuratMasuk yang akan diperbarui berdasarkan ID
-        $surat_masuk = SuratMasuk::findOrFail($id);
+        $suratMasuk = SuratMasuk::findOrFail($id);
 
         // Update data surat masuk
         $data = [
@@ -101,7 +101,7 @@ class SuratMasukController extends Controller
         }
 
         // Memperbarui data surat masuk dengan data yang baru
-        $surat_masuk->update($data);
+        $suratMasuk->update($data);
 
         // Mengarahkan kembali ke halaman index dengan pesan sukses
         return redirect()->route('surat_masuk.index')

@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuratMasukController;
 use App\Http\Controllers\DisposisiSmController;
+use App\Http\Controllers\SuratKeluarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,9 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 route::get('/home',[HomeController::class,'index'])->
@@ -53,16 +54,13 @@ Route::post('/surat-masuk/{id}/disposisi', 'SuratMasukController@disposisi')->na
 Route::get('/disposisi', [DisposisiSmController::class, 'index'])->name('disposisi_sm.index');
 Route::get('/disposisi/create', [DisposisiSmController::class, 'create'])->name('disposisi_sm.create');
 Route::post('/disposisi', [DisposisiSmController::class, 'store'])->name('disposisi_sm.store');
-Route::get('/disposisi/{id}', [DisposisiSmController::class, 'show'])->name('disposisi_sm.show');
-Route::get('/disposisi/{id}/edit', [DisposisiSmController::class, 'edit'])->name('disposisi_sm.edit');
-Route::put('/disposisi/{id}', [DisposisiSmController::class, 'update'])->name('disposisi_sm.update');
-Route::delete('/disposisi/{id}', [DisposisiSmController::class, 'destroy'])->name('disposisi_sm.destroy');
+Route::put('/disposisi_sm/{id}/mark_as_completed', [DisposisiSmController::class, 'markAsCompleted'])->name('mark_as_completed');
 
-// routes/web.php
-
-Route::get('/surat_masuk/{suratMasuk}/disposisi/create', [DisposisiSmController::class, 'create'])->name('surat_masuk.disposisi.create');
-Route::post('/surat_masuk/{suratMasuk}/disposisi', [DisposisiSmController::class, 'store'])->name('surat_masuk.disposisi.store');
-Route::post('/disposisi_sm/{id}/mark_as_completed', [DisposisiSmController::class, 'markAsCompleted'])->name('mark_as_completed');
-
+Route::get('/surat-keluar', [SuratKeluarController::class, 'index'])->name('surat_keluar.index');
+Route::get('/surat-keluar/create', [SuratKeluarController::class, 'create'])->name('surat_keluar.create');
+Route::post('/surat-keluar', [SuratKeluarController::class, 'store'])->name('surat_keluar.store');
+Route::get('/surat-keluar/{id}/edit', [SuratKeluarController::class, 'edit'])->name('surat_keluar.edit');
+Route::put('/surat-keluar/{id}', [SuratKeluarController::class, 'update'])->name('surat_keluar.update');
+Route::delete('/surat-keluar/{id}', [SuratKeluarController::class, 'destroy'])->name('surat_keluar.destroy');
 
 require __DIR__.'/auth.php';

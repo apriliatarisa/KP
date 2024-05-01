@@ -11,34 +11,35 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'unread_disposisi_count', // Menambahkan kolom unread_disposisi_count
+        'unread_disposisi_count',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Mutator untuk menambah jumlah disposisi yang belum dibaca
+    public function incrementUnreadDisposisiCount()
+    {
+        $this->unread_disposisi_count++;
+        $this->save();
+    }
+
+    // Mutator untuk mengurangi jumlah disposisi yang belum dibaca
+    public function decrementUnreadDisposisiCount()
+    {
+        if ($this->unread_disposisi_count > 0) {
+            $this->unread_disposisi_count--;
+            $this->save();
+        }
+    }
 }

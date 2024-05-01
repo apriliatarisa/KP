@@ -1,9 +1,9 @@
 <x-app-layout>
     <style>
         .disposisi-completed {
-            background-color: #f2f2f2; /* Ubah warna latar belakang menjadi abu-abu */
-            color: #999; /* Ubah warna teks */
-            pointer-events: none; /* Menonaktifkan interaksi mouse */
+            background-color: #f2f2f2;
+            color: #999;
+            pointer-events: none;
         }
     </style>
 
@@ -12,12 +12,11 @@
             <div class="card-header py-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Disposisi Surat Masuk</h6>
-                    <!-- Tambahkan Badge untuk Menampilkan Jumlah Surat Masuk Baru yang Belum Dibaca -->
-                    <span class="badge badge-danger">{{ auth()->user()->unread_disposisi_count }}</span>
-                    <!-- End of Badge -->
-                    <!-- Export Button -->
-                    <button class="btn btn-secondary" id="exportData">Export Data</button>
-                    <!-- End of Export Button -->
+                    <!-- Menampilkan Jumlah Disposisi yang Belum Dibaca -->
+                    @if(auth()->user()->unread_disposisi_count > 0)
+                        <span class="badge badge-danger">{{ auth()->user()->unread_disposisi_count }}</span>
+                    @endif
+                    <!-- End of Menampilkan Jumlah Disposisi yang Belum Dibaca -->
                 </div>
             </div>
             <div class="card-body">
@@ -53,23 +52,14 @@
                                     <td>{{ $disposisi->created_at->format('d/m/Y H:i:s') }}</td>
                                     <td style="white-space: nowrap;">
                                         {{-- Tombol Menyelesaikan Disposisi --}}
-                                        <form action="{{ route('mark_as_completed', $disposisi->id) }}" method="POST" style="display: inline;">
+                                        <form action="{{ route('mark_as_completed', $disposisi->id) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-success {{ $disposisi->completed ? 'disabled' : '' }}">
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-sm btn-success" {{ $disposisi->status ? 'disabled' : '' }}>
                                                 <i class="fas fa-check fa-fw"></i> Tandai Selesai
                                             </button>
                                         </form>
-                                        {{-- End of Tombol Menyelesaikan Disposisi --}}
-                                        
-                                        {{-- Tombol Hapus Disposisi --}}
-                                        <form action="{{ route('disposisi_sm.destroy', $disposisi->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus disposisi surat masuk ini?')">
-                                                <i class="fas fa-trash fa-fw"></i> Hapus
-                                            </button>
-                                        </form>
-                                        {{-- End of Tombol Hapus Disposisi --}}
+                                       
                                     </td>                                                                  
                                 </tr>
                             @endforeach
