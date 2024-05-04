@@ -90,18 +90,29 @@ class SuratMasukController extends Controller
             'isi' => $request->isi,
         ];
 
-        // Jika ada file yang diunggah
+        // // Jika ada file yang diunggah
+        // if ($request->hasFile('file')) {
+        //     $file = $request->file('file');
+        //     $filePath = $file->store('public/surat_masuk');
+        //     $data['file_path'] = $filePath;
+        // } else {
+        //     // Tidak ada file yang diunggah, atur nilai default atau null untuk file_path
+        //     $data['file_path'] = null; // atau nilai default lainnya
+        // }
         if ($request->hasFile('file')) {
+            // Hapus file lama jika ada
+            if ($suratMasuk->file_path) {
+                Storage::disk('public')->delete('surat_masuk/' . $suratMasuk->file_path);
+            }
+    
             $file = $request->file('file');
-            $filePath = $file->store('public/surat_masuk');
-            $data['file_path'] = $filePath;
-        } else {
-            // Tidak ada file yang diunggah, atur nilai default atau null untuk file_path
-            $data['file_path'] = null; // atau nilai default lainnya
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('surat_masuk', $fileName, 'public');
+            $suratMasuk->file_path = $fileName;
         }
-
-        // Memperbarui data surat masuk dengan data yang baru
-        $suratMasuk->update($data);
+    
+        // Simpan perubahan
+        $suratMasuk->save();
 
         // Mengarahkan kembali ke halaman index dengan pesan sukses
         return redirect()->route('surat_masuk.index')

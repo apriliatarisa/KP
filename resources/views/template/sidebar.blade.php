@@ -56,6 +56,21 @@
         </a>
         </li>
 
+        
+    <!-- Nav Item - Disposisi surrat keluar -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('disposisi_sk.index') }}">
+            <i class="fas fa-fw fa-envelope"></i>
+            <span>Disposisi Surat Keluar</span>
+        </a>
+
+         <!-- Nav Item - Agenda -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('agenda.index') }}">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Agenda</span>
+        </a>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

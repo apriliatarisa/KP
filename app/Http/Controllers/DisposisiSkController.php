@@ -3,38 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\SuratMasuk;
-use App\Models\DisposisiSm;
+use App\Models\SuratKeluar;
+use App\Models\DisposisiSk; // Menggunakan model DisposisiSk
 use Illuminate\Http\Request;
 
-class DisposisiSmController extends Controller
+class DisposisiSkController extends Controller
 {
     /**
-     * Menampilkan semua data disposisi_sm.
+     * Menampilkan semua data disposisi_sk.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $disposisi_sm = DisposisiSm::orderBy('created_at', 'desc')->paginate(10);
-        $jumlahSelesai = DisposisiSm::where('status', true)->count();
-        return view('disposisi_sm.disposisi_sm', compact('disposisi_sm', 'jumlahSelesai'));
+        $disposisi_sk = DisposisiSk::orderBy('created_at', 'desc')->paginate(10);
+        $jumlahSelesaiSk = DisposisiSk::where('status', true)->count();
+        return view('disposisi_sk.disposisi_sk', compact('disposisi_sk', 'jumlahSelesaiSk')); // Menggunakan view 'disposisi_sk.index'
     }
 
     /**
-     * Menampilkan formulir untuk membuat disposisi_sm baru.
+     * Menampilkan formulir untuk membuat disposisi_sk baru.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $suratMasukList = SuratMasuk::all();
+        $suratKeluarList = SuratKeluar::all();
         $users = User::all();
-        return view('disposisi_sm.disposisi_sm_create', compact('users', 'suratMasukList'));
+        return view('disposisi_sk.disposisi_sk_create', compact('users', 'suratKeluarList')); // Menggunakan view 'disposisi_sk.create'
     }
 
     /**
-     * Menyimpan disposisi_sm baru ke database.
+     * Menyimpan disposisi_sk baru ke database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -45,13 +45,13 @@ class DisposisiSmController extends Controller
             'tujuan' => 'required|array',
             'tujuan.*' => 'exists:users,id', // Pastikan semua tujuan adalah ID pengguna yang valid
             'catatan' => 'nullable',
-            'id_surat_masuk' => 'required|exists:surat_masuk,id',
+            'id_surat_keluar' => 'required|exists:surat_keluar,id',
         ]);
 
         foreach ($request->tujuan as $user_id) {
-            DisposisiSm::create([
+            DisposisiSk::create([
                 'id_user' => auth()->user()->id,
-                'id_surat_masuk' => $request->id_surat_masuk,
+                'id_surat_keluar' => $request->id_surat_keluar,
                 'tujuan' => $user_id,
                 'catatan' => $request->catatan,
                 'read' => false,
@@ -61,7 +61,7 @@ class DisposisiSmController extends Controller
             $this->incrementUnreadDisposisiCount($user_id);
         }
 
-        return redirect()->route('disposisi_sm.index')->with('success', 'Disposisi surat masuk berhasil disimpan.');
+        return redirect()->route('disposisi_sk.index')->with('success', 'Disposisi surat keluar berhasil disimpan.');
     }
 
     /**
@@ -73,18 +73,18 @@ class DisposisiSmController extends Controller
     public function markAsCompleted($id)
     {
         // Temukan disposisi berdasarkan ID
-        $disposisi = DisposisiSm::findOrFail($id);
+        $disposisi = DisposisiSk::findOrFail($id);
 
         // Periksa apakah pengguna yang mencoba menandai disposisi selesai adalah pengguna yang sesuai dengan tujuan disposisi
         if ($disposisi->tujuan != auth()->user()->id) {
             // Jika bukan, kembalikan dengan pesan kesalahan
-            return redirect()->route('disposisi_sm.index')->with('error', 'Anda tidak memiliki izin untuk menandai disposisi ini sebagai selesai.');
+            return redirect()->route('disposisi_sk.index')->with('error', 'Anda tidak memiliki izin untuk menandai disposisi ini sebagai selesai.');
         }
 
         // Periksa apakah disposisi sudah selesai sebelumnya
         if ($disposisi->status) {
             // Jika sudah selesai, kembalikan dengan pesan kesalahan
-            return redirect()->route('disposisi_sm.index')->with('error', 'Disposisi telah ditandai sebagai selesai sebelumnya.');
+            return redirect()->route('disposisi_sk.index')->with('error', 'Disposisi telah ditandai sebagai selesai sebelumnya.');
         }
 
         // Tandai disposisi sebagai selesai
@@ -94,10 +94,8 @@ class DisposisiSmController extends Controller
         $this->decrementUnreadDisposisiCount(auth()->user()->id);
 
         // Redirect kembali ke halaman index disposisi
-        return redirect()->route('disposisi_sm.index')->with('success', 'Disposisi telah ditandai sebagai selesai.');
+        return redirect()->route('disposisi_sk.index')->with('success', 'Disposisi telah ditandai sebagai selesai.');
     }
-
-    
 
     /**
      * Menambah jumlah disposisi yang belum dibaca dari sesi pengguna.

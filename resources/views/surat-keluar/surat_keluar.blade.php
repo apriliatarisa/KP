@@ -43,29 +43,52 @@
                                     <td>{{ $surat->no_surat }}</td>
                                     <td>{{ \Carbon\Carbon::parse($surat->tgl_terbit)->format('d/m/Y') }}</td>
                                     <td>{{ $surat->isi }}</td>
-                                    <td>
-                                        @if($surat->file_path)
-                                            <a href="{{ asset('storage/surat_keluar/' . $surat->file_path) }}" class="btn btn-sm btn-info" download>Unduh</a>
-                                        @else
-                                            <span class="text-muted">Tidak ada file</span>
-                                        @endif
-                                    </td>
                                     <td>{{ $surat->pengirim }}</td>
                                     <td>{{ $surat->created_at->format('d/m/Y') }}</td>
                                     <td>
-                                        {{-- <a href="{{ route('surat_keluar.show', $surat->id) }}" class="btn btn-sm btn-info">
-                                            <i class="fas fa-info-circle fa-fw"></i>
-                                        </a> --}}
-                                        <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit fa-fw"></i>
-                                        </a>
-                                        <form action="{{ route('surat_keluar.destroy', $surat->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus surat keluar ini?')">
-                                                <i class="fas fa-trash fa-fw"></i>
-                                            </button>
-                                        </form>
+                                        <td>
+                                            @if ($surat['file_path'])
+                                                <a href="{{ asset('storage/surat_keluar/' . $surat['file_path']) }}"
+                                                    target="_blank" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-info-circle fa-fw"></i>
+                                                </a>
+                                            @else
+                                                <a href="#" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#staticBackdrop">
+                                                    <i class="fas fa-info-circle fa-fw"></i>
+                                                </a>
+                                            @endif
+                                            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                  <div class="modal-content">
+                                                    <div class="modal-body">
+                                                      <center>
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                            Berkas tidak tersedia!
+                                                        </div>
+                                                      </center>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+                                                      <a href="{{ route('surat_keluar.edit', $surat->id) }}" type="button" class="btn btn-primary">Tambah berkas</a>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            <a href="{{ route('surat_keluar.edit', $surat->id) }}"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit fa-fw"></i>
+                                            </a>
+                                            <form action="{{ route('surat_keluar.destroy', $surat->id) }}" method="POST"
+                                                style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus surat keluar ini?')">
+                                                    <i class="fas fa-trash fa-fw"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </td>
                                 </tr>
                             @endforeach

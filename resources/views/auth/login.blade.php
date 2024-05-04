@@ -33,7 +33,7 @@
         <div class="mb-2 flex justify-center"> <!-- Menambahkan mb-2 untuk margin-bottom -->
             <img src="{{ asset('logo/asabri.png') }}" alt="Logo Perusahaan" class="h-17">
         </div>
-        <div class="mb-2"><center><p><b>Sistem Informasi Arsip Surat (SIAP) <br>
+        <div class="mb-2"><center><p><b>Sistem Informasi Arsip (SIAP) Surat <br>
             ASABRI KC Bengkulu </b></br>
         </p></center></div> <!-- Menambahkan mb-2 untuk margin-bottom -->
         <!-- Tambahkan flex justify-center di sini -->
@@ -78,6 +78,11 @@
                     <x-primary-button class="ml-3 bg-navy hover:bg-blue-800">
                         {{ __('Log in') }}
                     </x-primary-button>
+                    <a href="/register">
+                        <x-primary-button type="button" class="ml-3 bg-navy hover:bg-blue-800">
+                            {{ __('Register') }}
+                        </x-primary-button>
+                    </a>
                 </div>
             </form>
         </div>

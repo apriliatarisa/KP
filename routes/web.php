@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuratMasukController;
 use App\Http\Controllers\DisposisiSmController;
 use App\Http\Controllers\SuratKeluarController;
+use App\Http\Controllers\DisposisiSkController;
+use App\Http\Controllers\AgendaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -49,7 +51,7 @@ Route::get('/surat-masuk/{id}', [SuratMasukController::class, 'show'])->name('su
 Route::get('/surat-masuk/{id}/edit', [SuratMasukController::class, 'edit'])->name('surat_masuk.edit');
 Route::put('/surat-masuk/{id}', [SuratMasukController::class, 'update'])->name('surat_masuk.update');
 Route::delete('/surat-masuk/{id}', [SuratMasukController::class, 'destroy'])->name('surat_masuk.destroy');
-Route::post('/surat-masuk/{id}/disposisi', 'SuratMasukController@disposisi')->name('surat_masuk.disposisi');
+// Route::post('/surat-masuk/{id}/disposisi', 'SuratMasukController@disposisi')->name('surat_masuk.disposisi');
 
 Route::get('/disposisi', [DisposisiSmController::class, 'index'])->name('disposisi_sm.index');
 Route::get('/disposisi/create', [DisposisiSmController::class, 'create'])->name('disposisi_sm.create');
@@ -63,4 +65,10 @@ Route::get('/surat-keluar/{id}/edit', [SuratKeluarController::class, 'edit'])->n
 Route::put('/surat-keluar/{id}', [SuratKeluarController::class, 'update'])->name('surat_keluar.update');
 Route::delete('/surat-keluar/{id}', [SuratKeluarController::class, 'destroy'])->name('surat_keluar.destroy');
 
+Route::get('/disposisi-sk', [DisposisiSkController::class, 'index'])->name('disposisi_sk.index');
+Route::get('/disposisi-sk/create', [DisposisiSkController::class, 'create'])->name('disposisi_sk.create');
+Route::post('/disposisi-sk', [DisposisiSkController::class, 'store'])->name('disposisi_sk.store');
+Route::put('/disposisi_sk/{id}/mark_as_completed', [DisposisiSkController::class, 'markAsCompleted'])->name('mark_as_completed_sk');
+
+Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 require __DIR__.'/auth.php';
