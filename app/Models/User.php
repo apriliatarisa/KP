@@ -42,4 +42,20 @@ class User extends Authenticatable
             $this->save();
         }
     }
+
+     // Mutator untuk menambah jumlah disposisi surat keluar yang belum dibaca
+     public function incrementUnreadDisposisiskCount()
+     {
+         $this->unread_disposisisk_count++;
+         $this->save();
+     }
+ 
+     // Mutator untuk mengurangi jumlah disposisi surat keluar yang belum dibaca
+     public function decrementUnreadDisposisiskCount()
+     {
+         if ($this->unread_disposisisk_count > 0) {
+             $this->unread_disposisisk_count--;
+             $this->save();
+         }
+     }
 }

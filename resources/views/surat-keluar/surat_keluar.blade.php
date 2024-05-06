@@ -28,7 +28,6 @@
                                 <th>Nomor Surat</th>
                                 <th>Tanggal Terbit</th>
                                 <th>Isi</th>
-                                <th>File</th>
                                 <th>Pengirim</th> 
                                 <th>Tanggal Input</th>
                                 <th>Aksi</th>
@@ -46,49 +45,50 @@
                                     <td>{{ $surat->pengirim }}</td>
                                     <td>{{ $surat->created_at->format('d/m/Y') }}</td>
                                     <td>
-                                        <td>
-                                            @if ($surat['file_path'])
-                                                <a href="{{ asset('storage/surat_keluar/' . $surat['file_path']) }}"
-                                                    target="_blank" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-info-circle fa-fw"></i>
-                                                </a>
-                                            @else
-                                                <a href="#" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#staticBackdrop">
-                                                    <i class="fas fa-info-circle fa-fw"></i>
-                                                </a>
-                                            @endif
-                                            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-sm">
-                                                  <div class="modal-content">
+                                        @if ($surat['file_path'])
+                                            <a href="{{ asset('storage/surat_keluar/' . $surat['file_path']) }}" target="_blank" class="btn btn-sm btn-info">
+                                                <i class="fas fa-info-circle fa-fw"></i>
+                                            </a>
+                                        @else
+                                            <!-- Button untuk membuka modal -->
+                                            <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#fileModal{{ $surat->id }}">
+                                                <i class="fas fa-info-circle fa-fw"></i>
+                                            </button>
+                                            <!-- End of Button -->
+                                        @endif
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="fileModal{{ $surat->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Berkas Tidak Tersedia</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
                                                     <div class="modal-body">
-                                                      <center>
-                                                        <div class="alert alert-danger" role="alert">
-                                                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                                            Berkas tidak tersedia!
-                                                        </div>
-                                                      </center>
+                                                        Berkas tidak tersedia!
                                                     </div>
                                                     <div class="modal-footer">
-                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
-                                                      <a href="{{ route('surat_keluar.edit', $surat->id) }}" type="button" class="btn btn-primary">Tambah berkas</a>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+                                                        <!-- Tautan untuk pergi ke halaman edit -->
+                                                        <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        <!-- End of Tautan -->
                                                     </div>
-                                                  </div>
                                                 </div>
-                                              </div>
-                                            <a href="{{ route('surat_keluar.edit', $surat->id) }}"
-                                                class="btn btn-sm btn-primary">
-                                                <i class="fas fa-edit fa-fw"></i>
-                                            </a>
-                                            <form action="{{ route('surat_keluar.destroy', $surat->id) }}" method="POST"
-                                                style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus surat keluar ini?')">
-                                                    <i class="fas fa-trash fa-fw"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                            </div>
+                                        </div>
+                                        <!-- End of Modal -->
+                                        <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit fa-fw"></i>
+                                        </a>
+                                        <form action="{{ route('surat_keluar.destroy', $surat->id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus surat keluar ini?')">
+                                                <i class="fas fa-trash fa-fw"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

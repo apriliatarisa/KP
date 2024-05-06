@@ -58,7 +58,7 @@ class DisposisiSkController extends Controller
             ]);
 
             // Panggil metode untuk menambah jumlah disposisi yang belum dibaca
-            $this->incrementUnreadDisposisiCount($user_id);
+            $this->incrementUnreadDisposisiskCount($user_id);
         }
 
         return redirect()->route('disposisi_sk.index')->with('success', 'Disposisi surat keluar berhasil disimpan.');
@@ -91,7 +91,7 @@ class DisposisiSkController extends Controller
         $disposisi->update(['status' => true]);
 
         // Kurangi jumlah disposisi yang belum dibaca dari sesi pengguna yang bersangkutan
-        $this->decrementUnreadDisposisiCount(auth()->user()->id);
+        $this->decrementUnreadDisposisiskCount(auth()->user()->id);
 
         // Redirect kembali ke halaman index disposisi
         return redirect()->route('disposisi_sk.index')->with('success', 'Disposisi telah ditandai sebagai selesai.');
@@ -103,10 +103,10 @@ class DisposisiSkController extends Controller
      * @param  int  $user_id
      * @return void
      */
-    private function incrementUnreadDisposisiCount($user_id)
+    private function incrementUnreadDisposisiskCount($user_id)
     {
         $user = User::find($user_id);
-        $user->incrementUnreadDisposisiCount();
+        $user->incrementUnreadDisposisiskCount();
     }
 
     /**
@@ -115,9 +115,9 @@ class DisposisiSkController extends Controller
      * @param  int  $user_id
      * @return void
      */
-    private function decrementUnreadDisposisiCount($user_id)
+    private function decrementUnreadDisposisiskCount($user_id)
     {
         $user = User::find($user_id);
-        $user->decrementUnreadDisposisiCount();
+        $user->decrementUnreadDisposisiskCount();
     }
 }

@@ -55,70 +55,61 @@ class SuratKeluarController extends Controller
         ->with('success', 'Surat keluar berhasil ditambahkan.');
 }
 
-public function edit($id)
-{
-    $suratKeluar = SuratKeluar::findOrFail($id); // Variabel sudah diperbaiki
-    return view('surat-keluar.surat_keluar_edit', compact('suratKeluar'));
-}
+ // Menampilkan formulir untuk mengedit data surat keluar
+    public function edit($id)
+ {
+     $suratKeluar = SuratKeluar::findOrFail($id); // Variabel sudah diperbaiki
+     return view('surat-keluar.surat_keluar_edit', compact('suratKeluar'));
+ }
 
 
+ // Metode update
+    public function update(Request $request, $id)
+ {
+     // Validasi input
+     $request->validate([
+         'tujuan_surat' => 'required|string',
+         'no_surat' => 'required|string',
+         'tgl_terbit' => 'nullable|date',
+         'isi' => 'required|string',
+         'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
+     ]);
 
-public function update(Request $request, $id)
-{
-    // Temukan surat keluar berdasarkan ID
-    $suratKeluar = SuratKeluar::findOrFail($id);
-    
-    // Pastikan hanya pengguna yang memiliki akses yang sesuai yang dapat mengedit surat keluar
-    // Misalnya, hanya pengguna yang memiliki izin khusus atau hanya pemilik surat keluar yang dapat mengeditnya.
-    // Anda dapat menyesuaikan logika akses sesuai dengan kebutuhan aplikasi Anda.
-    // Contoh logika akses sederhana:
-    if ($suratKeluar->id_user !== Auth::id()) {
-        return redirect()->route('surat_keluar.index')
-            ->with('error', 'Anda tidak memiliki izin untuk mengedit surat keluar ini.');
-    }
+     // Menemukan instance SuratKeluar yang akan diperbarui berdasarkan ID
+     $suratKeluar = SuratKeluar::findOrFail($id);
 
-    // Validasi request
-    $validatedData = $request->validate([
-        'tujuan_surat' => 'required',
-        'no_surat' => 'required',
-        'tgl_terbit' => 'nullable|date',
-        'isi' => 'required',
-        'file' => 'nullable|mimes:pdf,doc,docx|max:2048', // File boleh kosong atau diisi
-    ]);
+     // Update data surat keluar
+     $suratKeluar->tujuan_surat = $request->tujuan_surat;
+     $suratKeluar->no_surat = $request->no_surat;
+     $suratKeluar->tgl_terbit = $request->tgl_terbit;
+     $suratKeluar->isi = $request->isi;
 
-    // Update data surat keluar
-    $suratKeluar->tujuan_surat = $validatedData['tujuan_surat'];
-    $suratKeluar->no_surat = $validatedData['no_surat'];
-    $suratKeluar->tgl_terbit = $validatedData['tgl_terbit'];
-    $suratKeluar->isi = $validatedData['isi'];
+     if ($request->hasFile('file')) {
+         // Hapus file lama jika ada
+         if ($suratKeluar->file_path) {
+             Storage::disk('public')->delete('surat_keluar/' . $suratKeluar->file_path);
+         }
+ 
+         $file = $request->file('file');
+         $fileName = time() . '_' . $file->getClientOriginalName();
+         $filePath = $file->storeAs('surat_keluar', $fileName, 'public');
+         $suratKeluar->file_path = $fileName;
+     }
+ 
+     // Simpan perubahan
+     $suratKeluar->save();
 
-    // Upload file jika ada
-    if ($request->hasFile('file')) {
-        // Hapus file lama jika ada
-        if ($suratKeluar->file_path) {
-            Storage::disk('public')->delete('surat_keluar/' . $suratKeluar->file_path);
-        }
-
-        $file = $request->file('file');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('surat_keluar', $fileName, 'public');
-        $suratKeluar->file_path = $fileName;
-    }
-
-    // Simpan perubahan
-    $suratKeluar->save();
-
-    return redirect()->route('surat_keluar.index')
-        ->with('success', 'Surat keluar berhasil diperbarui.');
-}
-
-    // Menghapus data surat masuk
+     // Mengarahkan kembali ke halaman index dengan pesan sukses
+     return redirect()->route('surat_keluar.index')
+         ->with('success', 'Data surat keluar berhasil diperbarui.');
+ }
+    // Menghapus data surat keluar
     public function destroy($id)
     {
         $suratKeluar = SuratKeluar::findOrFail($id);
         $suratKeluar->delete();
 
         return redirect()->route('surat_keluar.index')
-            ->with('success', 'Data surat masuk berhasil dihapus.');
+            ->with('success', 'Data surat keluar berhasil dihapus.');
     }
 }
