@@ -11,9 +11,13 @@ class SuratKeluarController extends Controller
 {
     public function index()
     {
-        $suratKeluar = SuratKeluar::orderBy('created_at','desc')->paginate(10);
+
+            $suratKeluar = SuratKeluar::orderBy('created_at', 'desc')->paginate(10);
+
+
         return view('surat-keluar.surat_keluar', compact('suratKeluar'));
     }
+
 
     public function create()
     {
@@ -21,95 +25,104 @@ class SuratKeluarController extends Controller
     }
 
     public function store(Request $request)
-{
-    // Validasi request
-    $validatedData = $request->validate([
-        'tujuan_surat' => 'required',
-        'no_surat' => 'required',
-        'tgl_terbit' => 'nullable|date',
-        'isi' => 'required',
-        'file' => 'nullable|mimes:pdf,doc,docx|max:2048', // File boleh kosong atau diisi
-    ]);
+    {
+        // Validasi request
+        $validatedData = $request->validate([
+            'tujuan_surat' => 'required',
+            'no_surat' => 'required',
+            'tgl_terbit' => 'nullable|date',
+            'isi' => 'required',
+            'file' => 'nullable|mimes:pdf,doc,docx|max:2048', // File boleh kosong atau diisi
+        ]);
 
-    // Set pengirim berdasarkan pengguna yang sedang login
-    $validatedData['pengirim'] = Auth::user()->name;
+        // Set pengirim berdasarkan pengguna yang sedang login
+        $validatedData['pengirim'] = Auth::user()->name;
 
-    // Set id_user berdasarkan pengguna yang sedang login
-    $validatedData['id_user'] = Auth::id();
+        // Set id_user berdasarkan pengguna yang sedang login
+        $validatedData['id_user'] = Auth::id();
 
-    // Upload file jika ada
-    if ($request->hasFile('file')) {
-        $file = $request->file('file');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('surat_keluar', $fileName, 'public');
-        $validatedData['file_path'] = $fileName;
-    } else {
-        // Jika tidak ada file diunggah, atur file_path menjadi null
-        $validatedData['file_path'] = null;
+        // Upload file jika ada
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('surat_keluar', $fileName, 'public');
+            $validatedData['file_path'] = $fileName;
+        } else {
+            // Jika tidak ada file diunggah, atur file_path menjadi null
+            $validatedData['file_path'] = null;
+        }
+
+        // Simpan data surat keluar
+        SuratKeluar::create($validatedData);
+
+        return redirect()->route('surat_keluar.index')
+            ->with('success', 'Surat keluar berhasil ditambahkan.');
     }
 
-    // Simpan data surat keluar
-    SuratKeluar::create($validatedData);
-
-    return redirect()->route('surat_keluar.index')
-        ->with('success', 'Surat keluar berhasil ditambahkan.');
-}
-
- // Menampilkan formulir untuk mengedit data surat keluar
     public function edit($id)
- {
-     $suratKeluar = SuratKeluar::findOrFail($id); // Variabel sudah diperbaiki
-     return view('surat-keluar.surat_keluar_edit', compact('suratKeluar'));
- }
+    {
+        $suratKeluar = SuratKeluar::findOrFail($id); // Variabel sudah diperbaiki
+        return view('surat-keluar.surat_keluar_edit', compact('suratKeluar'));
+    }
 
 
- // Metode update
+
     public function update(Request $request, $id)
- {
-     // Validasi input
-     $request->validate([
-         'tujuan_surat' => 'required|string',
-         'no_surat' => 'required|string',
-         'tgl_terbit' => 'nullable|date',
-         'isi' => 'required|string',
-         'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Optional: validasi untuk file
-     ]);
+    {
+        // Temukan surat keluar berdasarkan ID
+        $suratKeluar = SuratKeluar::findOrFail($id);
 
-     // Menemukan instance SuratKeluar yang akan diperbarui berdasarkan ID
-     $suratKeluar = SuratKeluar::findOrFail($id);
+        // Pastikan hanya pengguna yang memiliki akses yang sesuai yang dapat mengedit surat keluar
+        // Misalnya, hanya pengguna yang memiliki izin khusus atau hanya pemilik surat keluar yang dapat mengeditnya.
+        // Anda dapat menyesuaikan logika akses sesuai dengan kebutuhan aplikasi Anda.
+        // Contoh logika akses sederhana:
+        if ($suratKeluar->id_user !== Auth::id()) {
+            return redirect()->route('surat_keluar.index')
+                ->with('error', 'Anda tidak memiliki izin untuk mengedit surat keluar ini.');
+        }
 
-     // Update data surat keluar
-     $suratKeluar->tujuan_surat = $request->tujuan_surat;
-     $suratKeluar->no_surat = $request->no_surat;
-     $suratKeluar->tgl_terbit = $request->tgl_terbit;
-     $suratKeluar->isi = $request->isi;
+        // Validasi request
+        $validatedData = $request->validate([
+            'tujuan_surat' => 'required',
+            'no_surat' => 'required',
+            'tgl_terbit' => 'nullable|date',
+            'isi' => 'required',
+            'file' => 'nullable|mimes:pdf,doc,docx|max:2048', // File boleh kosong atau diisi
+        ]);
 
-     if ($request->hasFile('file')) {
-         // Hapus file lama jika ada
-         if ($suratKeluar->file_path) {
-             Storage::disk('public')->delete('surat_keluar/' . $suratKeluar->file_path);
-         }
- 
-         $file = $request->file('file');
-         $fileName = time() . '_' . $file->getClientOriginalName();
-         $filePath = $file->storeAs('surat_keluar', $fileName, 'public');
-         $suratKeluar->file_path = $fileName;
-     }
- 
-     // Simpan perubahan
-     $suratKeluar->save();
+        // Update data surat keluar
+        $suratKeluar->tujuan_surat = $validatedData['tujuan_surat'];
+        $suratKeluar->no_surat = $validatedData['no_surat'];
+        $suratKeluar->tgl_terbit = $validatedData['tgl_terbit'];
+        $suratKeluar->isi = $validatedData['isi'];
 
-     // Mengarahkan kembali ke halaman index dengan pesan sukses
-     return redirect()->route('surat_keluar.index')
-         ->with('success', 'Data surat keluar berhasil diperbarui.');
- }
-    // Menghapus data surat keluar
+        // Upload file jika ada
+        if ($request->hasFile('file')) {
+            // Hapus file lama jika ada
+            if ($suratKeluar->file_path) {
+                Storage::disk('public')->delete('surat_keluar/' . $suratKeluar->file_path);
+            }
+
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('surat_keluar', $fileName, 'public');
+            $suratKeluar->file_path = $fileName;
+        }
+
+        // Simpan perubahan
+        $suratKeluar->save();
+
+        return redirect()->route('surat_keluar.index')
+            ->with('success', 'Surat keluar berhasil diperbarui.');
+    }
+
+    // Menghapus data surat masuk
     public function destroy($id)
     {
         $suratKeluar = SuratKeluar::findOrFail($id);
         $suratKeluar->delete();
 
         return redirect()->route('surat_keluar.index')
-            ->with('success', 'Data surat keluar berhasil dihapus.');
+            ->with('success', 'Data surat masuk berhasil dihapus.');
     }
 }

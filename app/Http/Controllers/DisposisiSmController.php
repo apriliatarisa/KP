@@ -7,6 +7,8 @@ use App\Models\SuratMasuk;
 use App\Models\DisposisiSm;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 class DisposisiSmController extends Controller
 {
     /**
@@ -16,8 +18,22 @@ class DisposisiSmController extends Controller
      */
     public function index()
     {
-        $disposisi_sm = DisposisiSm::orderBy('created_at', 'desc')->paginate(10);
+        // Get the logged-in user
+        $user = Auth::user();
+
+        // If user is not 'kakancab', retrieve only disposisi for the logged-in user
+        if ($user->usertype !== 'kakancab') {
+            // Example of fetching DisposisiSm records with associated User records
+            $disposisi_sm = DisposisiSm::where('tujuan', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            // If user is 'kakancab', retrieve all disposisi
+            $disposisi_sm = DisposisiSm::orderBy('created_at', 'desc')->paginate(10);
+        }
+
         $jumlahSelesai = DisposisiSm::where('status', true)->count();
+
         return view('disposisi_sm.disposisi_sm', compact('disposisi_sm', 'jumlahSelesai'));
     }
 
@@ -28,7 +44,20 @@ class DisposisiSmController extends Controller
      */
     public function create()
     {
+        // // Get the logged-in user
+        // $user = Auth::user();
+
+
+        // if ($user->usertype === 'kakancab') {
+        //     // Retrieve all surat masuk
+        //     $suratMasukList = SuratMasuk::all();
+        // } else {
+        //     // Retrieve only the surat masuk associated with the logged-in user
+        //     $suratMasukList = SuratMasuk::where('id_user', $user->id)->get();
+        // }
+
         $suratMasukList = SuratMasuk::all();
+
         $users = User::all();
         return view('disposisi_sm.disposisi_sm_create', compact('users', 'suratMasukList'));
     }

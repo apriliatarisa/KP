@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'users';
+
     protected $fillable = [
         'name',
         'email',
@@ -27,6 +29,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // Relationship with SuratKeluar
+    public function suratKeluar()
+    {
+        return $this->hasMany(SuratKeluar::class);
+    }
+
+    public function suratMasuk()
+    {
+        return $this->hasMany(SuratMasuk::class);
+    }
+
     // Mutator untuk menambah jumlah disposisi yang belum dibaca
     public function incrementUnreadDisposisiCount()
     {
@@ -42,20 +55,4 @@ class User extends Authenticatable
             $this->save();
         }
     }
-
-     // Mutator untuk menambah jumlah disposisi surat keluar yang belum dibaca
-     public function incrementUnreadDisposisiskCount()
-     {
-         $this->unread_disposisisk_count++;
-         $this->save();
-     }
- 
-     // Mutator untuk mengurangi jumlah disposisi surat keluar yang belum dibaca
-     public function decrementUnreadDisposisiskCount()
-     {
-         if ($this->unread_disposisisk_count > 0) {
-             $this->unread_disposisisk_count--;
-             $this->save();
-         }
-     }
 }

@@ -20,7 +20,6 @@ class SuratMasuk extends Model
         'id_user',
     ];
 
-    // Relasi dengan model User
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
