@@ -48,7 +48,6 @@
                                     <td>{{ $surat->pengirim }}</td>
                                     <td>{{ $surat->created_at->format('d/m/Y') }}</td>
                                     <td>
-                                    <td>
                                         @if ($surat['file_path'])
                                             <a href="#"
                                                 onclick="openPDF('{{ asset('storage/surat_keluar/' . $surat['file_path']) }}');"
@@ -76,13 +75,10 @@
                                                         </center>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Kembali</button>
-                                                        @if ($surat->user_id === Auth::id())
-                                                            <a href="{{ route('surat_keluar.edit', $surat->id) }}"
-                                                                type="button" class="btn btn-primary">Tambah berkas</a>
-                                                        @endif
-
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+                                                        <!-- Tautan untuk pergi ke halaman edit -->
+                                                        <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        <!-- End of Tautan -->
                                                     </div>
                                                 </div>
                                             </div>

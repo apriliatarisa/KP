@@ -79,13 +79,10 @@
                                                         </center>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Kembali</button>
-                                                        <!-- Show "Tambah berkas" button only for the logged-in user -->
-                                                        @if ($surat->user_id === Auth::id())
-                                                            <a href="{{ route('surat_masuk.edit', $surat->id) }}"
-                                                                class="btn btn-primary">Tambah berkas</a>
-                                                        @endif
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+                                                        <!-- Tautan untuk pergi ke halaman edit -->
+                                                        <a href="{{ route('surat_masuk.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        <!-- End of Tautan -->
                                                     </div>
                                                 </div>
                                             </div>

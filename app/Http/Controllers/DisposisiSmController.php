@@ -44,17 +44,17 @@ class DisposisiSmController extends Controller
      */
     public function create()
     {
-        // // Get the logged-in user
-        // $user = Auth::user();
+        // Get the logged-in user
+        $user = Auth::user();
 
 
-        // if ($user->usertype === 'kakancab') {
-        //     // Retrieve all surat masuk
-        //     $suratMasukList = SuratMasuk::all();
-        // } else {
-        //     // Retrieve only the surat masuk associated with the logged-in user
-        //     $suratMasukList = SuratMasuk::where('id_user', $user->id)->get();
-        // }
+        if ($user->usertype === 'kakancab') {
+            // Retrieve all surat masuk
+            $suratMasukList = SuratMasuk::all();
+        } else {
+            // Retrieve only the surat masuk associated with the logged-in user
+            $suratMasukList = SuratMasuk::where('id_user', $user->id)->get();
+        }
 
         $suratMasukList = SuratMasuk::all();
 

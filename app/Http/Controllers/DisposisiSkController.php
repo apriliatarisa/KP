@@ -43,19 +43,19 @@ class DisposisiSkController extends Controller
      */
     public function create()
     {
-        // // Get the logged-in user
-        // $user = auth()->user();
+        // Get the logged-in user
+        $user = auth()->user();
 
-        // // Check if the user is 'kakancab'
-        // if ($user->usertype === 'kakancab') {
-        //     // Retrieve all surat keluar
-        //     $suratKeluarList = SuratKeluar::all();
-        // } else {
-        //     // Retrieve only the surat keluar associated with the logged-in user
-        //     $suratKeluarList = SuratKeluar::where('id_user', $user->id)->get();
-        // }
+        // Check if the user is 'kakancab'
+        if ($user->usertype === 'kakancab') {
+            // Retrieve all surat keluar
+            $suratKeluarList = SuratKeluar::all();
+        } else {
+            // Retrieve only the surat keluar associated with the logged-in user
+            $suratKeluarList = SuratKeluar::where('id_user', $user->id)->get();
+        }
 
-        // $suratKeluarList = SuratKeluar::all();
+        $suratKeluarList = SuratKeluar::all();
         $users = User::all();
         return view('disposisi_sk.disposisi_sk_create', compact('users', 'suratKeluarList')); // Menggunakan view 'disposisi_sk.create'
     }
