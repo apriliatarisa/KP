@@ -13,8 +13,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Disposisi Surat Keluar</h6>
                     <!-- Menampilkan Jumlah Disposisi yang Belum Dibaca Surat Keluar -->
-                    @if(auth()->user()->unread_disposisi_keluar_count > 0)
-                        <span class="badge badge-danger">{{ auth()->user()->unread_disposisi_keluar_count }}</span>
+                    @if(auth()->user()->unread_disposisisk_count > 0)
+                        <span class="badge badge-danger">{{ auth()->user()->unread_disposisisk_count }}</span>
                     @endif
                     <!-- End of Menampilkan Jumlah Disposisi yang Belum Dibaca Surat Keluar -->
                 </div>

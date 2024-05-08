@@ -29,7 +29,6 @@
                                 <th>Nomor Surat</th>
                                 <th>Tanggal Terbit</th>
                                 <th>Isi</th>
-                                <th>File</th>
                                 <th>Pengirim</th>
                                 <th>Tanggal Input</th>
                                 <th>Aksi</th>
@@ -45,7 +44,7 @@
                                     <td>{{ $surat->no_surat }}</td>
                                     <td>{{ \Carbon\Carbon::parse($surat->tgl_terbit)->format('d/m/Y') }}</td>
                                     <td>{{ $surat->isi }}</td>
-                                    <td>{{ $surat->pengirim }}</td>
+                                    <td>{{ $surat->user->name }}</td>
                                     <td>{{ $surat->created_at->format('d/m/Y') }}</td>
                                     <td>
                                         @if ($surat['file_path'])
@@ -77,7 +76,9 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
                                                         <!-- Tautan untuk pergi ke halaman edit -->
+                                                        @if(Auth::check() && Auth::user()->id == $surat->id_user)
                                                         <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        @endif
                                                         <!-- End of Tautan -->
                                                     </div>
                                                 </div>

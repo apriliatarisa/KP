@@ -81,7 +81,9 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
                                                         <!-- Tautan untuk pergi ke halaman edit -->
-                                                        <a href="{{ route('surat_masuk.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        @if(Auth::check() && Auth::user()->id == $surat->id_user)
+                                                        <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        @endif
                                                         <!-- End of Tautan -->
                                                     </div>
                                                 </div>

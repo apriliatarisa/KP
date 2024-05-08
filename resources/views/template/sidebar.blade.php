@@ -13,13 +13,6 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-   <!-- Nav Item - Beranda -->
-    <li class="nav-item">
-    {{-- <a class="nav-link" href="index.html">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Beranda</span></a> --}}
-    </li>
-
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -68,7 +61,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('agenda.index') }}">
             <i class="fas fa-fw fa-book"></i>
-            <span>Agenda</span>
+            <span>Riwayat Surat</span>
         </a>
 
     <!-- Divider -->

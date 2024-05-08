@@ -55,4 +55,16 @@ class User extends Authenticatable
             $this->save();
         }
     }
+
+    public function incrementUnreadDisposisiskCount()
+    {
+        $this->unread_disposisisk_count++;
+        $this->save();
+    }
+
+    public function decrementUnreadDisposisiskCount()
+    {
+        $this->unread_disposisisk_count--;
+        $this->save();
+    }
 }
