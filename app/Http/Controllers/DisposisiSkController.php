@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\SuratKeluar;
 use App\Models\DisposisiSk; // Menggunakan model DisposisiSk
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DisposisiSkController extends Controller
 {
@@ -16,9 +17,23 @@ class DisposisiSkController extends Controller
      */
     public function index()
     {
-        $disposisi_sk = DisposisiSk::orderBy('created_at', 'desc')->paginate(10);
+        // Get the logged-in user
+        $user = Auth::user();
+
+        // If user is not 'kakancab', retrieve only disposisi_sk for the logged-in user
+        if ($user->usertype !== 'kakancab') {
+            // Example of fetching DisposisiSk records for the logged-in user
+            $disposisi_sk = DisposisiSk::where('tujuan', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            // If user is 'kakancab', retrieve all disposisi_sk
+            $disposisi_sk = DisposisiSk::orderBy('created_at', 'desc')->paginate(10);
+        }
+
         $jumlahSelesaiSk = DisposisiSk::where('status', true)->count();
-        return view('disposisi_sk.disposisi_sk', compact('disposisi_sk', 'jumlahSelesaiSk')); // Menggunakan view 'disposisi_sk.index'
+
+        return view('disposisi_sk.disposisi_sk', compact('disposisi_sk', 'jumlahSelesaiSk'));
     }
 
     /**
@@ -28,7 +43,19 @@ class DisposisiSkController extends Controller
      */
     public function create()
     {
-        $suratKeluarList = SuratKeluar::all();
+        // // Get the logged-in user
+        // $user = auth()->user();
+
+        // // Check if the user is 'kakancab'
+        // if ($user->usertype === 'kakancab') {
+        //     // Retrieve all surat keluar
+        //     $suratKeluarList = SuratKeluar::all();
+        // } else {
+        //     // Retrieve only the surat keluar associated with the logged-in user
+        //     $suratKeluarList = SuratKeluar::where('id_user', $user->id)->get();
+        // }
+
+        // $suratKeluarList = SuratKeluar::all();
         $users = User::all();
         return view('disposisi_sk.disposisi_sk_create', compact('users', 'suratKeluarList')); // Menggunakan view 'disposisi_sk.create'
     }
@@ -58,7 +85,7 @@ class DisposisiSkController extends Controller
             ]);
 
             // Panggil metode untuk menambah jumlah disposisi yang belum dibaca
-            $this->incrementUnreadDisposisiskCount($user_id);
+            $this->incrementUnreadDisposisiCount($user_id);
         }
 
         return redirect()->route('disposisi_sk.index')->with('success', 'Disposisi surat keluar berhasil disimpan.');
@@ -91,7 +118,7 @@ class DisposisiSkController extends Controller
         $disposisi->update(['status' => true]);
 
         // Kurangi jumlah disposisi yang belum dibaca dari sesi pengguna yang bersangkutan
-        $this->decrementUnreadDisposisiskCount(auth()->user()->id);
+        $this->decrementUnreadDisposisiCount(auth()->user()->id);
 
         // Redirect kembali ke halaman index disposisi
         return redirect()->route('disposisi_sk.index')->with('success', 'Disposisi telah ditandai sebagai selesai.');
@@ -103,10 +130,10 @@ class DisposisiSkController extends Controller
      * @param  int  $user_id
      * @return void
      */
-    private function incrementUnreadDisposisiskCount($user_id)
+    private function incrementUnreadDisposisiCount($user_id)
     {
         $user = User::find($user_id);
-        $user->incrementUnreadDisposisiskCount();
+        $user->incrementUnreadDisposisiCount();
     }
 
     /**
@@ -115,9 +142,9 @@ class DisposisiSkController extends Controller
      * @param  int  $user_id
      * @return void
      */
-    private function decrementUnreadDisposisiskCount($user_id)
+    private function decrementUnreadDisposisiCount($user_id)
     {
         $user = User::find($user_id);
-        $user->decrementUnreadDisposisiskCount();
+        $user->decrementUnreadDisposisiCount();
     }
 }

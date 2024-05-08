@@ -12,9 +12,17 @@ class SuratMasukController extends Controller
     // Menampilkan semua data surat masuk
     public function index()
     {
-        $suratMasuk = SuratMasuk::orderBy('created_at','desc')->paginate(10);
-        return view('surat-masuk.surat_masuk', compact('suratMasuk'));
+
+        $suratMasuk = SuratMasuk::orderBy('created_at', 'desc')->paginate(10);
+
+
+        return view(
+            'surat-masuk.surat_masuk',
+            compact('suratMasuk')
+        );
     }
+
+
 
     // Menampilkan form untuk menambah data surat masuk
     public function create()
@@ -83,23 +91,34 @@ class SuratMasukController extends Controller
         $suratMasuk = SuratMasuk::findOrFail($id);
 
         // Update data surat masuk
-        $suratMasuk->asal_surat = $request->asal_surat;
-        $suratMasuk->no_surat = $request->no_surat;
-        $suratMasuk->tgl_terima = $request->tgl_terima;
-        $suratMasuk->isi = $request->isi;
+        $data = [
+            'asal_surat' => $request->asal_surat,
+            'no_surat' => $request->no_surat,
+            'tgl_terima' => $request->tgl_terima,
+            'isi' => $request->isi,
+        ];
 
+        // // Jika ada file yang diunggah
+        // if ($request->hasFile('file')) {
+        //     $file = $request->file('file');
+        //     $filePath = $file->store('public/surat_masuk');
+        //     $data['file_path'] = $filePath;
+        // } else {
+        //     // Tidak ada file yang diunggah, atur nilai default atau null untuk file_path
+        //     $data['file_path'] = null; // atau nilai default lainnya
+        // }
         if ($request->hasFile('file')) {
             // Hapus file lama jika ada
             if ($suratMasuk->file_path) {
                 Storage::disk('public')->delete('surat_masuk/' . $suratMasuk->file_path);
             }
-    
+
             $file = $request->file('file');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('surat_masuk', $fileName, 'public');
             $suratMasuk->file_path = $fileName;
         }
-    
+
         // Simpan perubahan
         $suratMasuk->save();
 

@@ -38,6 +38,7 @@
                             <!-- Add your table rows here -->
                             @foreach ($suratMasuk as $surat)
                                 <tr>
+                                    <!-- Table data for each surat masuk -->
                                     <td>{{ $loop->index + 1 + ($suratMasuk->currentPage() - 1) * $suratMasuk->perPage() }}
                                     </td>
                                     <td>{{ $surat->asal_surat }}</td>
@@ -47,49 +48,69 @@
                                     <td>{{ $surat->user->name ?? '-' }}</td>
                                     <td>{{ $surat->created_at->format('d/m/Y') }}</td>
                                     <td>
+                                        <!-- Show "Info" button if file_path exists -->
                                         @if ($surat['file_path'])
-                                            <a href="{{ asset('storage/surat_masuk/' . $surat['file_path']) }}" target="_blank" class="btn btn-sm btn-info">
+                                            <a href="#"
+                                                onclick="openPDF('{{ asset('storage/surat_masuk/' . $surat['file_path']) }}');"
+                                                class="btn btn-sm btn-info">
                                                 <i class="fas fa-info-circle fa-fw"></i>
                                             </a>
+                                            <!-- If file_path doesn't exist, show "Tambah Berkas" button -->
                                         @else
-                                            <!-- Button untuk membuka modal -->
-                                            <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#fileModal{{ $surat->id }}">
+                                            <button class="btn btn-sm btn-warning" data-toggle="modal"
+                                                data-target="#staticBackdrop">
                                                 <i class="fas fa-info-circle fa-fw"></i>
                                             </button>
-                                            <!-- End of Button -->
                                         @endif
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="fileModal{{ $surat->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
+
+                                        <!-- Modal for "Berkas tidak tersedia" -->
+                                        <div class="modal fade" id="staticBackdrop" data-backdrop="static"
+                                            data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-sm">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Berkas Tidak Tersedia</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
                                                     <div class="modal-body">
-                                                        Berkas tidak tersedia!
+                                                        <center>
+                                                            <div class="alert alert-danger" role="alert">
+                                                                <i class="fa fa-exclamation-triangle"
+                                                                    aria-hidden="true"></i>
+                                                                Berkas tidak tersedia!
+                                                            </div>
+                                                        </center>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
-                                                        <!-- Tautan untuk pergi ke halaman edit -->
-                                                        <a href="{{ route('surat_masuk.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
-                                                        <!-- End of Tautan -->
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Kembali</button>
+                                                        <!-- Show "Tambah berkas" button only for the logged-in user -->
+                                                        @if ($surat->user_id === Auth::id())
+                                                            <a href="{{ route('surat_masuk.edit', $surat->id) }}"
+                                                                class="btn btn-primary">Tambah berkas</a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- End of Modal -->
-                                        <a href="{{ route('surat_masuk.edit', $surat->id) }}" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit fa-fw"></i>
-                                        </a>
-                                        <form action="{{ route('surat_masuk.destroy', $surat->id) }}" method="POST" style="display: inline;">
+
+                                        <!-- Show "Edit" button only for the logged-in user -->
+                                        @if ($surat->id_user === Auth::id())
+                                            <a href="{{ route('surat_masuk.edit', $surat->id) }}"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit fa-fw"></i>
+                                            </a>
+                                        @else
+                                        @endif
+
+                                        <!-- Show "Delete" button only for the logged-in user -->
+                                        <form action="{{ route('surat_masuk.destroy', $surat->id) }}" method="POST"
+                                            style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus surat masuk ini?')">
-                                                <i class="fas fa-trash fa-fw"></i>
-                                            </button>
+                                            @if ($surat->id_user === Auth::id())
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus surat masuk ini?')">
+                                                    <i class="fas fa-trash fa-fw"></i>
+                                                </button>
+                                            @endif
                                         </form>
                                     </td>
                                 </tr>
@@ -136,5 +157,9 @@
                 ]
             });
         });
+
+        function openPDF(url) {
+            window.open(url, '_blank');
+        }
     </script>
 </x-app-layout>

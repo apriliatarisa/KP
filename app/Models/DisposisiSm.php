@@ -24,13 +24,13 @@ class DisposisiSm extends Model
     // Definisi hubungan dengan model User
     public function user()
     {
-    return $this->belongsTo(User::class, 'tujuan');
+        return $this->belongsTo(User::class, 'tujuan');
     }
 
     public function pengirim()
-{
-    return $this->belongsTo(User::class, 'id_user');
-}
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 
 
 
@@ -39,5 +39,4 @@ class DisposisiSm extends Model
     {
         return $this->belongsTo(SuratMasuk::class, 'id_surat_masuk');
     }
-
 }
