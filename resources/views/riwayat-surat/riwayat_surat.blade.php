@@ -37,16 +37,17 @@
                         </thead>
                         <tbody>
                             <!-- Add your table rows here -->
-                            @foreach ($riwayatSurat as $riwayat)
-                                <tr>
-                                    <!-- Table data for each riwayat surat -->
-                                    <td>{{ $loop->index + 1 }}</td> <!-- Ubah menjadi loop index + 1 -->
-                                    <td>{{ $riwayat->no_surat }}</td> <!-- Ubah menjadi no_surat -->
-                                    <td>{{ $riwayat->jenis_surat }}</td>
-                                    <td>{{ $riwayat->petugas }}</td>
-                                    <td>{{ $riwayat->tahun }}</td> <!-- Ubah menjadi tahun -->
-                                </tr>
-                            @endforeach
+                    @foreach ($riwayatSurat as $riwayat)
+                        <tr>
+                            <!-- Table data for each riwayat surat -->
+                            <td>{{ $loop->index + $riwayatSurat->firstItem() }}</td> <!-- Menggunakan firstItem() untuk mendapatkan nomor urut awal -->
+                            <td>{{ $riwayat->no_surat }}</td>
+                            <td>{{ $riwayat->jenis_surat }}</td>
+                            <td>{{ $riwayat->petugas }}</td>
+                            <td>{{ $riwayat->tahun }}</td>
+                         </tr>
+                    @endforeach
+
                         </tbody>
                     </table>
                 </div>
