@@ -1,5 +1,10 @@
 <x-app-layout>
     <!-- HTML code for layout and meta tags -->
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
 
     <div class="container-fluid">
         <div class="card shadow mb-4">
@@ -74,10 +79,12 @@
                                                         </center>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Kembali</button>
                                                         <!-- Tautan untuk pergi ke halaman edit -->
-                                                        @if(Auth::check() && Auth::user()->id == $surat->id_user)
-                                                        <a href="{{ route('surat_keluar.edit', $surat->id) }}" class="btn btn-primary">Tambah Berkas</a>
+                                                        @if (Auth::check() && Auth::user()->id == $surat->id_user)
+                                                            <a href="{{ route('surat_keluar.edit', $surat->id) }}"
+                                                                class="btn btn-primary">Tambah Berkas</a>
                                                         @endif
                                                         <!-- End of Tautan -->
                                                     </div>

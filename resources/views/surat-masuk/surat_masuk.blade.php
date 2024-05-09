@@ -1,5 +1,10 @@
 <x-app-layout>
     <!-- HTML code for layout and meta tags -->
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
 
     <div class="container-fluid">
         <div class="card shadow mb-4">

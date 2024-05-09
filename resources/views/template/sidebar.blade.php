@@ -57,9 +57,9 @@
             <span>Disposisi Surat Keluar</span>
         </a>
 
-         <!-- Nav Item - Agenda -->
+         <!-- Nav Item - Riwayat Surat -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('agenda.index') }}">
+        <a class="nav-link" href="{{ route('riwayat_surat.index') }}">
             <i class="fas fa-fw fa-book"></i>
             <span>Riwayat Surat</span>
         </a>

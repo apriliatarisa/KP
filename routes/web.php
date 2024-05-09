@@ -6,7 +6,7 @@ use App\Http\Controllers\SuratMasukController;
 use App\Http\Controllers\DisposisiSmController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\DisposisiSkController;
-use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\RiwayatSuratController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,5 +70,5 @@ Route::get('/disposisi-sk/create', [DisposisiSkController::class, 'create'])->na
 Route::post('/disposisi-sk', [DisposisiSkController::class, 'store'])->name('disposisi_sk.store');
 Route::put('/disposisi_sk/{id}/mark_as_completed', [DisposisiSkController::class, 'markAsCompleted'])->name('mark_as_completed_sk');
 
-Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
+Route::get('/riwayat-surat', [RiwayatSuratController::class, 'index'])->name('riwayat_surat.index');
 require __DIR__.'/auth.php';
