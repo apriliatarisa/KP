@@ -63,8 +63,7 @@
                                                 data-target="#staticBackdrop">
                                                 <i class="fas fa-info-circle fa-fw"></i>
                                             </a>
-                                        @endif
-                                        <div class="modal fade" id="staticBackdrop" data-backdrop="static"
+                                            <div class="modal fade" id="staticBackdrop" data-backdrop="static"
                                             data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                                             aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -81,16 +80,13 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Kembali</button>
-                                                        <!-- Tautan untuk pergi ke halaman edit -->
-                                                        @if (Auth::check() && Auth::user()->id == $surat->id_user)
-                                                            <a href="{{ route('surat_keluar.edit', $surat->id) }}"
-                                                                class="btn btn-primary">Tambah Berkas</a>
-                                                        @endif
-                                                        <!-- End of Tautan -->
+                    
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                            @endif
+                              
                                         @if ($surat->id_user === Auth::id())
                                             <a href="{{ route('surat_keluar.edit', $surat->id) }}"
                                                 class="btn btn-sm btn-primary">

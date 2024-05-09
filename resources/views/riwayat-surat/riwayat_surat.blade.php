@@ -28,6 +28,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <th>No</th> <!-- Berikan judul kolom No -->
                                 <th>Nomor Surat</th>
                                 <th>Jenis Surat</th>
                                 <th>Petugas</th>
@@ -39,11 +40,11 @@
                             @foreach ($riwayatSurat as $riwayat)
                                 <tr>
                                     <!-- Table data for each riwayat surat -->
-                                    <td>{{ $loop->index + 1 }}</td>
-                                    <td>{{ $riwayat->nomor_surat }}</td>
+                                    <td>{{ $loop->index + 1 }}</td> <!-- Ubah menjadi loop index + 1 -->
+                                    <td>{{ $riwayat->no_surat }}</td> <!-- Ubah menjadi no_surat -->
                                     <td>{{ $riwayat->jenis_surat }}</td>
                                     <td>{{ $riwayat->petugas }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($riwayatSurat->created_at)->year }}</td>
+                                    <td>{{ $riwayat->tahun }}</td> <!-- Ubah menjadi tahun -->
                                 </tr>
                             @endforeach
                         </tbody>
