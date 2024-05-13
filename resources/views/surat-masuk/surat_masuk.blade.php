@@ -7,6 +7,13 @@
     </style>
 
     <div class="container-fluid">
+        <!-- Pesan Flash -->
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <div class="d-flex justify-content-between align-items-center">
@@ -19,8 +26,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-start mb-3">
                     <!-- Tambah Surat Masuk Button -->
-                    <a href="{{ route('surat_masuk.create') }}" id="tambahSuratMasuk" class="btn btn-primary mr-2">Tambah
-                        Surat Masuk</a>
+                    <a href="{{ route('surat_masuk.create') }}" id="tambahSuratMasuk" class="btn btn-primary mr-2">Tambah Surat Masuk</a>
                     <!-- End of Tambah Surat Masuk Button -->
                 </div>
 
@@ -161,5 +167,7 @@
         function openPDF(url) {
             window.open(url, '_blank');
         }
+
+            
     </script>
 </x-app-layout>

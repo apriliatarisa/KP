@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class SuratMasuk extends Model
 {
@@ -17,6 +18,7 @@ class SuratMasuk extends Model
         'tgl_terima',
         'isi',
         'file_path',
+        'penerima',
         'id_user',
     ];
 
@@ -31,6 +33,14 @@ class SuratMasuk extends Model
         return $this->hasMany(DisposisiSm::class, 'id_surat_masuk');
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($suratKeluar) {
+            $suratKeluar->penerima = Auth::user()->name;
+        });
+    }
     
 
 }

@@ -11,11 +11,11 @@
                             @method('PUT')
                             <div class="mb-3">
                                 <label for="asal_surat" class="form-label">Asal Surat</label>
-                                <input type="text" class="form-control" id="asal_surat" name="asal_surat" value="{{ $suratMasuk->asal_surat }}">
+                                <input type="text" class="form-control" id="asal_surat" name="asal_surat" required value="{{ $suratMasuk->asal_surat }}">
                             </div>
                             <div class="mb-3">
                                 <label for="no_surat" class="form-label">Nomor Surat</label>
-                                <input type="text" class="form-control" id="no_surat" name="no_surat" value="{{ $suratMasuk->no_surat }}">
+                                <input type="text" class="form-control" id="no_surat" name="no_surat" required value="{{ $suratMasuk->no_surat }}">
                             </div>
                             <div class="mb-3">
                                 <label for="tgl_terima" class="form-label">Tanggal Terima</label>
@@ -23,7 +23,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="isi" class="form-label">Isi</label>
-                                <textarea class="form-control" id="isi" name="isi" rows="5">{{ $suratMasuk->isi }}</textarea>
+                                <textarea class="form-control" id="isi" name="isi" required rows="5">{{ $suratMasuk->isi }}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="file" class="form-label">File</label>

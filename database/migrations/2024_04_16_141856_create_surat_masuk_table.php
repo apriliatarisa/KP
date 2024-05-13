@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('tgl_terima');
             $table->text('isi');
             $table->string('file_path')->nullable(); // Menjadikan kolom nullable
+            $table->string('penerima');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

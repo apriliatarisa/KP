@@ -10,11 +10,11 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="tujuan_surat" class="form-label">Tujuan Surat</label>
-                                <input type="text" class="form-control" id="tujuan_surat" name="tujuan_surat">
+                                <input type="text" class="form-control" id="tujuan_surat" name="tujuan_surat" required>
                             </div>
                             <div class="mb-3">
                                 <label for="no_surat" class="form-label">Nomor Surat</label>
-                                <input type="text" class="form-control" id="no_surat" name="no_surat">
+                                <input type="text" class="form-control" id="no_surat" name="no_surat" required>
                             </div>
                             <div class="mb-3">
                                 <label for="tgl_terbit" class="form-label">Tanggal Terbit</label>
@@ -22,7 +22,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="isi" class="form-label">Isi</label>
-                                <textarea class="form-control" id="isi" name="isi" rows="5"></textarea>
+                                <textarea class="form-control" id="isi" name="isi" required rows="5"></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="file" class="form-label">File</label>

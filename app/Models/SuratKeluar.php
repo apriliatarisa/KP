@@ -26,6 +26,11 @@ class SuratKeluar extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
+    public function disposisi()
+    {
+        return $this->hasMany(DisposisiSk::class, 'id_surat_keluar');
+    }
+
     // Metode untuk menetapkan pengirim secara otomatis
     protected static function boot()
     {

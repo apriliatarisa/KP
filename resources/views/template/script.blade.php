@@ -14,3 +14,22 @@
 <!-- Page level custom scripts -->
 <script src="{{ asset('template/js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ asset('template/js/demo/chart-pie-demo.js') }}"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        let input = this.value.toLowerCase();
+        let table = document.getElementById("dataTable");
+        let rows = table.getElementsByTagName("tr");
+
+        for (let row of rows) {
+            let rowData = row.textContent.toLowerCase();
+            if (rowData.includes(input)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    });
+</script>
