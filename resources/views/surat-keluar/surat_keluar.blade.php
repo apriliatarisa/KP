@@ -50,8 +50,7 @@
                             <!-- Add your table rows here -->
                             @foreach ($suratKeluar as $surat)
                                 <tr>
-                                    <td>{{ $loop->index + 1 + ($suratKeluar->currentPage() - 1) * $suratKeluar->perPage() }}
-                                    </td>
+                                    <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ $surat->tujuan_surat }}</td>
                                     <td>{{ $surat->no_surat }}</td>
                                     <td>{{ \Carbon\Carbon::parse($surat->tgl_terbit)->format('d/m/Y') }}</td>
@@ -92,7 +91,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            @endif
+                                        @endif
                               
                                         @if ($surat->id_user === Auth::id())
                                             <a href="{{ route('surat_keluar.edit', $surat->id) }}"
@@ -114,50 +113,46 @@
                                             @endif
                                         </form>
                                     </td>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Buttons -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    @if ($suratKeluar->previousPageUrl())
-                        <a href="{{ $suratKeluar->previousPageUrl() }}" class="btn btn-secondary">&laquo;
-                            Sebelumnya</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>&laquo; Sebelumnya</button>
-                    @endif
-
-                    <!-- Total Data -->
-                    <div>
-                        <p class="mb-0" style="color: blue; font-weight: bold;">Total surat keluar:
-                            {{ $suratKeluar->total() }}</p>
-                    </div>
-                    <!-- End of Total Data -->
-
-                    @if ($suratKeluar->nextPageUrl())
-                        <a href="{{ $suratKeluar->nextPageUrl() }}" class="btn btn-secondary">Selanjutnya &raquo;</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>Selanjutnya &raquo;</button>
-                    @endif
+                <!-- Total Data -->
+                <div>
+                    <center><p class="mb-0" style="color: blue; font-weight: bold;">Total surat keluar: {{ $suratKeluar->count() }}</p></center>
                 </div>
-                <!-- End of Pagination Buttons -->
-
+                <!-- End of Total Data -->
             </div>
         </div>
     </div>
 
     <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
-                searching: true, // Aktifkan pencarian
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
+        document.getElementById('exportData').addEventListener('click', function() {
+            // Get table element
+            var table = document.getElementById('dataTable');
+            
+            // Generate CSV content from table
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Tujuan Surat,Nomor Surat,Tanggal Terbit,Isi,Pengirim,Tanggal Input\n";
+            var rows = table.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                var rowData = [];
+                for (var j = 0; j < cells.length; j++) {
+                    rowData.push(cells[j].innerText);
+                }
+                csvContent += rowData.join(',') + "\n";
+            }
+            
+            // Create a CSV file and download
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "surat_keluar.csv");
+            document.body.appendChild(link);
+            link.click();
         });
 
         function openPDF(url) {

@@ -28,7 +28,7 @@ class DisposisiSkController extends Controller
                 ->paginate(10);
         } else {
             // If user is 'kakancab', retrieve all disposisi_sk
-            $disposisi_sk = DisposisiSk::orderBy('created_at', 'desc')->paginate(10);
+            $disposisi_sk = DisposisiSk::orderBy('created_at', 'desc')->get();
         }
 
         $jumlahSelesaiSk = DisposisiSk::where('status', true)->count();

@@ -17,6 +17,9 @@
                         <span class="badge badge-danger">{{ auth()->user()->unread_disposisisk_count }}</span>
                     @endif
                     <!-- End of Menampilkan Jumlah Disposisi yang Belum Dibaca Surat Keluar -->
+                    <!-- Export Button -->
+                    <button class="btn btn-secondary" id="exportData">Export Data</button>
+                    <!-- End of Export Button -->
                 </div>
             </div>
             <div class="card-body">
@@ -44,7 +47,7 @@
                             <!-- Add your table rows here -->
                             @foreach ($disposisi_sk as $index => $disposisi)
                                 <tr class="{{ $disposisi->completed ? 'disposisi-completed' : '' }}">
-                                    <td>{{ $index + 1 + ($disposisi_sk->currentPage() - 1) * $disposisi_sk->perPage() }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $disposisi->pengirim->name }}</td>
                                     <td>{{ $disposisi->suratKeluar->no_surat }}</td>
                                     <td>{{ $disposisi->user->name }}</td>
@@ -59,50 +62,37 @@
                                                 <i class="fas fa-check fa-fw"></i> Tandai Selesai
                                             </button>
                                         </form>
-                                       
-                                    </td>                                                                  
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Buttons -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    @if($disposisi_sk->previousPageUrl())
-                        <a href="{{ $disposisi_sk->previousPageUrl() }}" class="btn btn-secondary">&laquo; Sebelumnya</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>&laquo; Sebelumnya</button>
-                    @endif
-
-                    <!-- Total Data -->
-                    <div>
-                        <p class="mb-0" style="color: blue; font-weight: bold;">Total disposisi surat keluar: {{ $disposisi_sk->total() }}</p>
-                    </div>
-                    <!-- End of Total Data -->
-
-                    @if($disposisi_sk->nextPageUrl())
-                        <a href="{{ $disposisi_sk->nextPageUrl() }}" class="btn btn-secondary">Selanjutnya &raquo;</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>Selanjutnya &raquo;</button>
-                    @endif
+                <!-- Total Data -->
+                <div>
+                    <center><p class="mb-0" style="color: blue; font-weight: bold;">Total disposisi surat keluar: {{ $disposisi_sk->count() }}</p></center>
                 </div>
-                <!-- End of Pagination Buttons -->
+                <!-- End of Total Data -->
             </div>
         </div>
     </div>
 
-    <!-- Skrip DataTables -->
+    <!-- Skrip JavaScript untuk Ekspor Data -->
     <script>
-        $(document).ready(function () {
-            // Inisialisasi DataTables dengan pencarian aktif dan tombol ekspor
-            $('#dataTable').DataTable({
-                searching: true, // Aktifkan pencarian
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+        document.getElementById('exportData').addEventListener('click', function() {
+            var rows = Array.from(document.querySelectorAll('#dataTable tbody tr')).map(row => Array.from(row.querySelectorAll('td')).map(cell => cell.innerText));
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Pengirim,Surat Keluar,Tujuan,Catatan,Tanggal Disposisi\n";
+            rows.forEach(function(row) {
+                csvContent += row.join(',') + "\n";
             });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "disposisi_surat_keluar.csv");
+            document.body.appendChild(link);
+            link.click();
         });
     </script>
 </x-app-layout>

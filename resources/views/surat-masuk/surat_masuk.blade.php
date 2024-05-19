@@ -50,8 +50,7 @@
                             @foreach ($suratMasuk as $surat)
                                 <tr>
                                     <!-- Table data for each surat masuk -->
-                                    <td>{{ $loop->index + 1 + ($suratMasuk->currentPage() - 1) * $suratMasuk->perPage() }}
-                                    </td>
+                                    <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ $surat->asal_surat }}</td>
                                     <td>{{ $surat->no_surat }}</td>
                                     <td>{{ \Carbon\Carbon::parse($surat->tgl_terima)->format('d/m/Y') }}</td>
@@ -66,7 +65,6 @@
                                                 class="btn btn-sm btn-info">
                                                 <i class="fas fa-info-circle fa-fw"></i>
                                             </a>
-                                            <!-- If file_path doesn't exist, show "Tambah Berkas" button -->
                                         @else
                                             <button class="btn btn-sm btn-warning" data-toggle="modal"
                                                 data-target="#staticBackdrop">
@@ -91,7 +89,6 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
-                                                      
                                                     </div>
                                                 </div>
                                             </div>
@@ -103,7 +100,6 @@
                                                 class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
-                                        @else
                                         @endif
 
                                         <!-- Show "Delete" button only for the logged-in user -->
@@ -125,49 +121,35 @@
                     </table>
                 </div>
 
-                <!-- Pagination Buttons -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    @if ($suratMasuk->previousPageUrl())
-                        <a href="{{ $suratMasuk->previousPageUrl() }}" class="btn btn-secondary">&laquo; Sebelumnya</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>&laquo; Sebelumnya</button>
-                    @endif
-
-                    <!-- Total Data -->
-                    <div>
-                        <p class="mb-0" style="color: blue; font-weight: bold;">Total surat masuk:
-                            {{ $suratMasuk->total() }}</p>
-                    </div>
-                    <!-- End of Total Data -->
-
-                    @if ($suratMasuk->nextPageUrl())
-                        <a href="{{ $suratMasuk->nextPageUrl() }}" class="btn btn-secondary">Selanjutnya &raquo;</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>Selanjutnya &raquo;</button>
-                    @endif
+                <!-- Total Data -->
+                <div>
+                    <center><p class="mb-0" style="color: blue; font-weight: bold;">Total surat masuk: {{ $suratMasuk->count() }}</p></center>
                 </div>
-                <!-- End of Pagination Buttons -->
-
+                <!-- End of Total Data -->
             </div>
         </div>
     </div>
 
-
     <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
-                searching: true, // Aktifkan pencarian
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+        document.getElementById('exportData').addEventListener('click', function() {
+            var rows = Array.from(document.querySelectorAll('#dataTable tbody tr')).map(row => Array.from(row.querySelectorAll('td')).map(cell => cell.innerText));
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Asal Surat,Nomor Surat,Tanggal Terima,Isi,Penerima,Tanggal Input\n";
+            rows.forEach(function(row) {
+                csvContent += row.join(',') + "\n";
             });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "surat_masuk.csv");
+            document.body.appendChild(link);
+            link.click();
         });
 
         function openPDF(url) {
             window.open(url, '_blank');
         }
 
-            
+        
     </script>
 </x-app-layout>

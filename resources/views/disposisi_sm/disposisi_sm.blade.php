@@ -17,6 +17,9 @@
                         <span class="badge badge-danger">{{ auth()->user()->unread_disposisi_count }}</span>
                     @endif
                     <!-- End of Menampilkan Jumlah Disposisi yang Belum Dibaca -->
+                    <!-- Export Button -->
+                    <button class="btn btn-secondary" id="exportData">Export Data</button>
+                    <!-- End of Export Button -->
                 </div>
             </div>
             <div class="card-body">
@@ -24,6 +27,7 @@
                     <!-- Tambah Disposisi Surat Masuk Button -->
                     <a href="{{ route('disposisi_sm.create') }}" id="tambahDisposisiSM" class="btn btn-primary mr-2">Tambah Disposisi Surat Masuk</a>
                     <!-- End of Tambah Disposisi Surat Masuk Button -->
+                    
                 </div>
 
                 <input type="text" id="searchInput" class="form-control mb-3" placeholder="Cari disposisi surat masuk...">
@@ -41,17 +45,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Add your table rows here -->
                             @foreach ($disposisi_sm as $index => $disposisi)
                                 <tr class="{{ $disposisi->completed ? 'disposisi-completed' : '' }}">
-                                    <td>{{ $index + 1 + ($disposisi_sm->currentPage() - 1) * $disposisi_sm->perPage() }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $disposisi->pengirim->name }}</td>
                                     <td>{{ $disposisi->suratMasuk->no_surat }}</td>
                                     <td>{{ $disposisi->user->name }}</td>
                                     <td>{{ $disposisi->catatan }}</td>
                                     <td>{{ $disposisi->created_at->format('d/m/Y H:i:s') }}</td>
                                     <td style="white-space: nowrap;">
-                                        {{-- Tombol Menyelesaikan Disposisi --}}
                                         <form action="{{ route('mark_as_completed', $disposisi->id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
@@ -59,50 +61,37 @@
                                                 <i class="fas fa-check fa-fw"></i> Tandai Selesai
                                             </button>
                                         </form>
-                                       
-                                    </td>                                                                  
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Buttons -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    @if($disposisi_sm->previousPageUrl())
-                        <a href="{{ $disposisi_sm->previousPageUrl() }}" class="btn btn-secondary">&laquo; Sebelumnya</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>&laquo; Sebelumnya</button>
-                    @endif
-
-                    <!-- Total Data -->
-                    <div>
-                        <p class="mb-0" style="color: blue; font-weight: bold;">Total disposisi surat masuk: {{ $disposisi_sm->total() }}</p>
-                    </div>
-                    <!-- End of Total Data -->
-
-                    @if($disposisi_sm->nextPageUrl())
-                        <a href="{{ $disposisi_sm->nextPageUrl() }}" class="btn btn-secondary">Selanjutnya &raquo;</a>
-                    @else
-                        <button class="btn btn-secondary" disabled>Selanjutnya &raquo;</button>
-                    @endif
+                <!-- Total Data -->
+                <div>
+                    <center><p class="mb-0" style="color: blue; font-weight: bold;">Total disposisi surat masuk: {{ $disposisi_sm->count() }}</p></center>
                 </div>
-                <!-- End of Pagination Buttons -->
+                <!-- End of Total Data -->
             </div>
         </div>
     </div>
 
-    <!-- Skrip DataTables -->
+    <!-- Skrip JavaScript untuk Ekspor Data -->
     <script>
-        $(document).ready(function () {
-            // Inisialisasi DataTables dengan pencarian aktif dan tombol ekspor
-            $('#dataTable').DataTable({
-                searching: true, // Aktifkan pencarian
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+        document.getElementById('exportData').addEventListener('click', function() {
+            var rows = Array.from(document.querySelectorAll('#dataTable tbody tr')).map(row => Array.from(row.querySelectorAll('td')).map(cell => cell.innerText));
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Pengirim,Surat Masuk,Tujuan,Catatan,Tanggal Disposisi\n";
+            rows.forEach(function(row) {
+                csvContent += row.join(',') + "\n";
             });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "disposisi_surat_masuk.csv");
+            document.body.appendChild(link);
+            link.click();
         });
     </script>
 </x-app-layout>

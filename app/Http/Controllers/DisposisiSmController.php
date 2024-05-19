@@ -29,7 +29,7 @@ class DisposisiSmController extends Controller
                 ->paginate(10);
         } else {
             // If user is 'kakancab', retrieve all disposisi
-            $disposisi_sm = DisposisiSm::orderBy('created_at', 'desc')->paginate(10);
+            $disposisi_sm = DisposisiSm::orderBy('created_at', 'desc')->get();
         }
 
         $jumlahSelesai = DisposisiSm::where('status', true)->count();

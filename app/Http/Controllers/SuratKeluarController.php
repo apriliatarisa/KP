@@ -12,7 +12,7 @@ class SuratKeluarController extends Controller
     public function index()
     {
 
-            $suratKeluar = SuratKeluar::orderBy('created_at', 'desc')->paginate(10);
+            $suratKeluar = SuratKeluar::orderBy('created_at', 'desc')->get();
 
 
         return view('surat-keluar.surat_keluar', compact('suratKeluar'));

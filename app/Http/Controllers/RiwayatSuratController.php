@@ -36,8 +36,8 @@ class RiwayatSuratController extends Controller
                     // ->whereNotNull('surat_keluar.tgl_terbit')
                     ->whereNotNull('surat_keluar.id_user')
             )
-            ->orderBy('timestamps', 'desc')
-            ->paginate(10);
+            ->orderBy('timestamps', 'desc')->get()
+            ;
 
         return view('riwayat-surat.riwayat_surat', compact('riwayatSurat'));
     }
