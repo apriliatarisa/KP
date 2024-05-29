@@ -12,7 +12,7 @@
                                 <label for="surat_keluar" class="form-label">Pilih Surat Keluar</label>
                                 <select class="form-select" id="surat_keluar" name="id_surat_keluar">
                                     @foreach($suratKeluarList as $suratKeluar)
-                                        <option value="{{ $suratKeluar->id }}">{{ $suratKeluar->no_surat }}</option>
+                                        <option value="{{ $suratKeluar->id }}">{{ $suratKeluar->no_surat }} - {{ $suratKeluar->isi }}</option>
                                     @endforeach
                                 </select>
                             </div>

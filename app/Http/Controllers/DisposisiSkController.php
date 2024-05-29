@@ -55,7 +55,7 @@ class DisposisiSkController extends Controller
             $suratKeluarList = SuratKeluar::where('id_user', $user->id)->get();
         }
 
-        $suratKeluarList = SuratKeluar::all();
+        // $suratKeluarList = SuratKeluar::all();
         $users = User::all();
         return view('disposisi_sk.disposisi_sk_create', compact('users', 'suratKeluarList')); // Menggunakan view 'disposisi_sk.create'
     }

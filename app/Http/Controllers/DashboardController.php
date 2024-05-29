@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $totalSuratKeluar = SuratKeluar::count();
         $totalDisposisiSuratMasuk = DisposisiSm::count();
         $totalDisposisiSuratKeluar = DisposisiSk::count();
-        
+        // dd($totalSuratMasuk);
         // Mengirim data ke view
         return view('dashboard', compact('totalSuratMasuk', 'totalSuratKeluar', 'totalDisposisiSuratMasuk', 'totalDisposisiSuratKeluar'));
     }

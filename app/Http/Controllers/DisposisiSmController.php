@@ -56,7 +56,7 @@ class DisposisiSmController extends Controller
             $suratMasukList = SuratMasuk::where('id_user', $user->id)->get();
         }
 
-        $suratMasukList = SuratMasuk::all();
+        // $suratMasukList = SuratMasuk::all();
 
         $users = User::all();
         return view('disposisi_sm.disposisi_sm_create', compact('users', 'suratMasukList'));

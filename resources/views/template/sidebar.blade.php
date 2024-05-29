@@ -17,13 +17,13 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    {{-- <!-- Nav Item - Dashboard -->
+    <!-- Nav Item - Dashboard -->
     <li class="nav-item">
     <a class="nav-link" href="{{ route('dashboard') }}">
         <i class="fas fa-fw fa-home"></i>
         <span>Beranda</span>
     </a>
-    </li> --}}
+    </li>
 
     <!-- Nav Item - Surat Masuk -->
     <li class="nav-item">
