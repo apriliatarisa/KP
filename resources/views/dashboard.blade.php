@@ -1,4 +1,22 @@
-<x-app-layout>
+{{-- <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Kakancab Dashboard') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    {{ __("You're logged in as Kakancab!") }}
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout> --}}
+
+{{-- <x-app-layout>
     <x-slot name="header">
         <div class="app-title">
             <div>
@@ -131,4 +149,73 @@
         </div>
     </div>
 
-</x-app-layout>
+</x-app-layout> --}}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Datang</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .welcome-container {
+            background: linear-gradient(135deg, #4fc3f7, #81d4fa);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+
+        .welcome-message h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .welcome-message p {
+            color: #ffffff;
+            font-size: 1.2em;
+            margin-bottom: 1.5em;
+        }
+
+        .cta-button {
+            background-color: #0288d1;
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #0277bd;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-message">
+            <h1>Selamat Datang!</h1>
+            <p>Semangat untuk hari ini. Istirahat dahulu bila lelah dan kembali lagi sesaat kemudian. Bahagia selalu yaa</p>
+            <button class="cta-button" onclick="window.location.href='{{ route('surat_masuk.index') }}';">Mulai Bekerja</button>
+        </div>
+    </div>
+</body>
+</html>
+

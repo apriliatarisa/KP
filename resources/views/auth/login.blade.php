@@ -78,11 +78,11 @@
                     <x-primary-button class="ml-3 bg-navy hover:bg-blue-800">
                         {{ __('Log in') }}
                     </x-primary-button>
-                    <a href="/register">
+                    {{-- <a href="/register">
                         <x-primary-button type="button" class="ml-3 bg-navy hover:bg-blue-800">
                             {{ __('Register') }}
                         </x-primary-button>
-                    </a>
+                    </a> --}}
                 </div>
             </form>
         </div>
