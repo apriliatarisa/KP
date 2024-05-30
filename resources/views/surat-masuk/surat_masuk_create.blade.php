@@ -27,6 +27,7 @@
                             <div class="mb-3">
                                 <label for="file" class="form-label">File</label>
                                 <input type="file" class="form-control" id="file" name="file">
+                                <p>PDF max:2048 KB</p>
                             </div>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>

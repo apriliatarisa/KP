@@ -20,5 +20,7 @@ class DashboardController extends Controller
         // dd($totalSuratMasuk);
         // Mengirim data ke view
         return view('dashboard', compact('totalSuratMasuk', 'totalSuratKeluar', 'totalDisposisiSuratMasuk', 'totalDisposisiSuratKeluar'));
+
+        
     }
 }

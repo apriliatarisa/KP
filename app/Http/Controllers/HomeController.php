@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DisposisiSk;
+use App\Models\DisposisiSm;
+use App\Models\SuratKeluar;
+use App\Models\SuratMasuk;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -18,7 +22,14 @@ class HomeController extends Controller
 
             if($usertype=='adum')
             {
-                return view('dashboard');
+                $totalSuratMasuk = SuratMasuk::count();
+                $totalSuratKeluar = SuratKeluar::count();
+                $totalDisposisiSuratMasuk = DisposisiSm::count();
+                $totalDisposisiSuratKeluar = DisposisiSk::count();
+                // dd($totalSuratMasuk);
+                // Mengirim data ke view
+                return view('dashboard', compact('totalSuratMasuk', 'totalSuratKeluar', 'totalDisposisiSuratMasuk', 'totalDisposisiSuratKeluar'));
+        
             }
 
             else if ($usertype=='kakancab')
