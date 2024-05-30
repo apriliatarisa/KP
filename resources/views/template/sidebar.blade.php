@@ -21,7 +21,7 @@
     <li class="nav-item">
     <a class="nav-link" href="{{ route('dashboard') }}">
         <i class="fas fa-fw fa-home"></i>
-        <span>Beranda</span>
+        <span>Dashboard</span>
     </a>
     </li>
 
