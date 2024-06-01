@@ -32,7 +32,7 @@ class SuratKeluarController extends Controller
             'no_surat' => 'required',
             'tgl_terbit' => 'nullable|date',
             'isi' => 'required',
-            'file' => 'nullable|mimes:pdf,doc,docx|max:2048', // File boleh kosong atau diisi
+            'file' => 'nullable|mimes:pdf,doc,docx|max:2048', 
         ]);
 
         // Set pengirim berdasarkan pengguna yang sedang login
@@ -62,6 +62,11 @@ class SuratKeluarController extends Controller
     public function edit($id)
     {
         $suratKeluar = SuratKeluar::findOrFail($id); // Variabel sudah diperbaiki
+        if ($suratKeluar->id_user !== Auth::id()) {
+            return redirect()->route('surat_keluar.index')
+                ->with('error', 'Anda tidak memiliki izin untuk mengupdate surat keluar ini.');
+        }
+        
         return view('surat-keluar.surat_keluar_edit', compact('suratKeluar'));
     }
 

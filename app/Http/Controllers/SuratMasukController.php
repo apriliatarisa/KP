@@ -27,7 +27,7 @@ class SuratMasukController extends Controller
             'no_surat' => 'required',
             'tgl_terima' => 'nullable|date',
             'isi' => 'required',
-            'file' => 'nullable|mimes:pdf,doc,docx|max:2048', // File boleh kosong atau diisi
+            'file' => 'nullable|mimes:pdf,doc,docx|max:2048', 
         ]);
 
         $validatedData['penerima'] = Auth::user()->name;
@@ -51,6 +51,10 @@ class SuratMasukController extends Controller
     public function edit($id)
     {
         $suratMasuk = SuratMasuk::findOrFail($id);
+        if ($suratMasuk->id_user !== Auth::id()) {
+            return redirect()->route('surat_masuk.index')
+                ->with('error', 'Anda tidak memiliki izin untuk mengupdate surat masuk ini.');
+        }
         return view('surat-masuk.surat_masuk_edit', compact('suratMasuk'));
     }
 
@@ -58,6 +62,7 @@ class SuratMasukController extends Controller
     {
         $suratMasuk = SuratMasuk::findOrFail($id);
 
+       
         $validatedData = $request->validate([
             'asal_surat' => 'required',
             'no_surat' => 'required',
@@ -70,6 +75,10 @@ class SuratMasukController extends Controller
         $suratMasuk->no_surat = $validatedData['no_surat'];
         $suratMasuk->tgl_terima = $validatedData['tgl_terima'];
         $suratMasuk->isi = $validatedData['isi'];
+
+        // $validatedData['penerima'] = Auth::user()->name;
+        // $validatedData['id_user'] = Auth::id();
+
 
         if ($request->hasFile('file')) {
             if ($suratMasuk->file_path) {
